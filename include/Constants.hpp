@@ -1,0 +1,13 @@
+#ifndef DOUBLE_TROUBLE_CONSTANTS_HPP
+#define DOUBLE_TROUBLE_CONSTANTS_HPP
+
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
+
+const int ANIMATION_SPEED_IN_MS = 250;
+
+const float GRAVITY = -1.0f;
+const float JUMP_POWER = 15.0f;
+const int JUMP_TICKS = 500;
+
+#endif //DOUBLE_TROUBLE_CONSTANTS_HPP
