@@ -36,23 +36,38 @@ int main() {
     player2.idleTexture = loadTexture(ren,
                                       "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_idle.bmp");
 
-    SDL_Texture *wallTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Walls/simple_wall.bmp");
+    SDL_Texture *wallTexture = loadTexture(ren,
+                                           "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Walls/simple_wall.bmp");
 
-    SDL_Texture *lavaTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Walls/simple_lava.bmp");
-    
+    SDL_Texture *lavaTexture = loadTexture(ren,
+                                           "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Walls/simple_lava.bmp");
+
+    SDL_Texture *finishFlagTexture = loadTexture(ren,
+                                                 "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/finish_flag.bmp");
+
     std::string level1File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level1.txt");
-    Level level(level1File, wallTexture, lavaTexture);
-
-    bool running = true;
-    int i = showmenu(ren);
-    if(i == 1){
-        running = false;
-    }
+    Level level1(level1File, wallTexture, lavaTexture, finishFlagTexture);;
+    std::string level2File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level2.txt");
+    Level level2(level2File, wallTexture, lavaTexture, finishFlagTexture);;
+    Level levels[2];
+    levels[0] = level1;
+    levels[1] = level2;
+    int currentLevel = 0;
+    int maxLevel = 1;
+    bool quit = false;
     
+    MenuEntries selectedEntry = showmenu(ren);
+    if (selectedEntry == NEW_GAME) {
+        currentLevel = 0;
+    }
+    if (selectedEntry == EXIT) {
+        return EXIT_SUCCESS;
+    }
+
     // Background colour
     SDL_SetRenderDrawColor(ren, 70, 70, 70, 0);
-    bool quit = false;
-    while (!quit && running) {
+    bool levelDone = false;
+    while (!quit) {
         while (SDL_PollEvent(&e)) {
             KeyboardHandler::handleKeyboardEvent(e);
             if (e.type == SDL_KEYDOWN) {
@@ -93,12 +108,13 @@ int main() {
             player1.sliding = false;
             player2.sliding = false;
         }
-        
-        if (KeyboardHandler::isReleased(SDLK_a) && KeyboardHandler::isReleased(SDLK_d) && KeyboardHandler::isReleased(SDLK_s)) {
+
+        if (KeyboardHandler::isReleased(SDLK_a) && KeyboardHandler::isReleased(SDLK_d) &&
+            KeyboardHandler::isReleased(SDLK_s)) {
             player1.direction = NONE;
             player2.direction = NONE;
         }
-        
+
         if (KeyboardHandler::isPressed(SDLK_ESCAPE)) {
             quit = true;
         }
@@ -106,8 +122,8 @@ int main() {
         if (!player1.grounded) {
             player1.position.y -= (int) player1.velocity_y;
             player1.velocity_y += GRAVITY;
-            if (player1.position.y > SCREEN_HEIGHT-20) {
-                player1.position.y = SCREEN_HEIGHT-20;
+            if (player1.position.y > SCREEN_HEIGHT - 20) {
+                player1.position.y = SCREEN_HEIGHT - 20;
                 player1.grounded = true;
                 player1.velocity_y = 0;
             }
@@ -116,29 +132,34 @@ int main() {
         if (!player2.grounded) {
             player2.position.y -= (int) player2.velocity_y;
             player2.velocity_y += GRAVITY;
-            if (player2.position.y > SCREEN_HEIGHT-20) {
-                player2.position.y = SCREEN_HEIGHT-20;
+            if (player2.position.y > SCREEN_HEIGHT - 20) {
+                player2.position.y = SCREEN_HEIGHT - 20;
                 player2.grounded = true;
                 player2.velocity_y = 0;
             }
         }
-        
-        if (!wallCollisionDetection(player1, level.walls)) {
+
+        if (!wallCollisionDetection(player1, levels[currentLevel].walls)) {
             player1.grounded = false;
         }
 
-        if (!wallCollisionDetection(player2, level.walls)) {
+        if (!wallCollisionDetection(player2, levels[currentLevel].walls)) {
             player2.grounded = false;
         }
 
-        if (enemyCollisionDetection(player1, level.staticEnemies)) {
+        if (otherCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
             quit = true;
         }
 
-        if (enemyCollisionDetection(player2, level.staticEnemies)) {
+        if (otherCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
             quit = true;
         }
-        
+
+        if (otherCollisionDetection(player1, levels[currentLevel].finishElements)
+            && otherCollisionDetection(player2, levels[currentLevel].finishElements)) {
+            levelDone = true;
+        }
+
         player1.position.x += player1.velocity_x;
         player1.velocity_x = 0;
 
@@ -151,16 +172,43 @@ int main() {
         SDL_RenderClear(ren);
         player1.render(ren);
         player2.render(ren);
-        drawLevel(ren, level);
+        drawLevel(ren, levels[currentLevel]);
         SDL_RenderPresent(ren);
+        
+        if (levelDone) {
+            if (currentLevel == maxLevel) {
+                quit = true;
+            } else {
+                player1.resetPosition(Coordinates(200,0));
+                player2.resetPosition(Coordinates(200,370));
+                levelDone = false;
+                currentLevel += 1;    
+            }
+        }
     }
     
-//    SDL_Texture *gameOverTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/game_over.bmp");
-//    Coordinates gameOverCoordinates(150,200);
-//    renderTexture(gameOverTexture, ren, gameOverCoordinates, 1.0f);
-//    SDL_RenderPresent(ren);
-//    SDL_Delay(5000);
-
+    // todo refactor this
+    if (levelDone) {
+        SDL_RenderClear(ren);
+        SDL_Texture *congratsTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/congrats.bmp");
+        SDL_Rect textureBox;
+        SDL_QueryTexture(congratsTexture, NULL, NULL, &textureBox.w, &textureBox.h);
+        Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w * 0.4f / 2 ,SCREEN_HEIGHT / 2 - textureBox.h * 0.4f / 2);
+        renderTexture(congratsTexture, ren, gameOverCoordinates, 0.4f);
+        SDL_RenderPresent(ren);
+        SDL_Delay(5000);
+        SDL_DestroyTexture(congratsTexture);
+    } else {
+        SDL_Texture *gameOverTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/game_over.bmp");
+        SDL_Rect textureBox;
+        SDL_QueryTexture(gameOverTexture, NULL, NULL, &textureBox.w, &textureBox.h);
+        Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w / 2,SCREEN_HEIGHT / 2 - textureBox.h / 2);
+        renderTexture(gameOverTexture, ren, gameOverCoordinates, 1.0f);
+        SDL_RenderPresent(ren);
+        SDL_Delay(1000);
+        SDL_DestroyTexture(gameOverTexture);
+    }
+    
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();

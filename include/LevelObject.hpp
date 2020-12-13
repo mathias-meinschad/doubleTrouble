@@ -33,4 +33,8 @@ struct Wall : LevelObjects {
     bool noClip = false;
 };
 
+struct Finish : LevelObjects {
+    Finish(Coordinates position, SDL_Texture *texture, float textureScale) : LevelObjects(position, texture, textureScale) {};
+};
+
 #endif //DOUBLE_TROUBLE_LEVELOBJECT_HPP

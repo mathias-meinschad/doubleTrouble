@@ -10,11 +10,12 @@
 #include "LevelObject.hpp"
 
 struct Level {
-    explicit Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *staticEnemyTexture);
+    Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *staticEnemyTexture, SDL_Texture *finishFlagTexture);
     Level() = default;
 
     std::list<Wall> walls;
-    std::list<StaticEnemy> staticEnemies;
+    std::list<LevelObjects> staticEnemies;
+    std::list<LevelObjects> finishElements;
 };
 
 

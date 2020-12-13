@@ -71,9 +71,9 @@ bool wallCollisionDetection(Sprite &sprite, std::list<Wall> &walls) {
     return collision;
 }
 
-bool enemyCollisionDetection(Sprite &sprite, std::list<StaticEnemy> &enemies) {
-    for (auto &enemy : enemies) {
-        if (collisionBelow(sprite, enemy) || collisionTop(sprite, enemy) || collisionLeft(sprite, enemy) || collisionRight(sprite, enemy)) {
+bool otherCollisionDetection(Sprite &sprite, std::list<LevelObjects> &objects) {
+    for (auto &object : objects) {
+        if (collisionBelow(sprite, object) || collisionTop(sprite, object) || collisionLeft(sprite, object) || collisionRight(sprite, object)) {
             return true;
         }
     }

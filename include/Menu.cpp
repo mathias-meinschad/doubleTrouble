@@ -1,7 +1,9 @@
 #include <iostream>
 #include "Menu.h"
 
-int showmenu(SDL_Renderer* ren)
+
+
+MenuEntries showmenu(SDL_Renderer* ren)
 {
     // Background colour
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
@@ -9,15 +11,18 @@ int showmenu(SDL_Renderer* ren)
     if (!timesNewRoman) {
         std::cout << TTF_GetError() << "\n";
     }
-    int x, y;
-    const int NUMMENU = 2;
-    const char* labels[NUMMENU] = {"New Game","Exit"};
-    SDL_Texture* menus[NUMMENU];
-    bool selected[NUMMENU] = {false, false};
+    const char* labels[NR_MENU_ITEMS] = {"New Game", "Select Level", "Exit"};
+    SDL_Texture* menus[NR_MENU_ITEMS];
+    int selectedEntry = 0;
     SDL_Color color[2] = {{255,255,255},{255,0,0}};
-    SDL_Rect pos[NUMMENU];
-    for(int i = 0; i < NUMMENU; i += 1) {
-        SDL_Surface *menuSurface = TTF_RenderText_Solid(timesNewRoman, labels[i], color[i]);
+    SDL_Rect pos[NR_MENU_ITEMS];
+    for(int i = 0; i < NR_MENU_ITEMS; i += 1) {
+        SDL_Surface *menuSurface;
+        if (i == selectedEntry) {
+            menuSurface = TTF_RenderText_Solid(timesNewRoman, labels[i], color[1]);
+        } else {
+            menuSurface = TTF_RenderText_Solid(timesNewRoman, labels[i], color[0]);
+        }
         menus[i] = SDL_CreateTextureFromSurface(ren, menuSurface);
         SDL_Rect textureBox;
         SDL_QueryTexture(menus[i], NULL, NULL, &textureBox.w, &textureBox.h);
@@ -25,7 +30,6 @@ int showmenu(SDL_Renderer* ren)
         pos[i].y =  100 + i * 50;
         pos[i].h = textureBox.h;
         pos[i].w = textureBox.w;
-        // TODO: enable this after test and check if it works
         SDL_FreeSurface(menuSurface);
     }
     
@@ -39,60 +43,43 @@ int showmenu(SDL_Renderer* ren)
                 case SDL_QUIT:
                     SDL_DestroyTexture(menus[0]);
                     SDL_DestroyTexture(menus[1]);
-                    return 1;
-                case SDL_MOUSEMOTION:
-                    x = event.motion.x;
-                    y = event.motion.y;
-                    for(int i = 0; i < NUMMENU; i += 1) {
-                        if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h)
-                        {
-                            if(!selected[i])
-                            {
-                                selected[i] = true;
-                                SDL_DestroyTexture(menus[i]);
-                                menus[i] = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Solid(timesNewRoman, labels[i], color[1]));
-                            }
-                        }
-                        else
-                        {
-                            if(selected[i])
-                            {
-                                selected[i] = false;
-                                SDL_DestroyTexture(menus[i]);
-                                menus[i] = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Solid(timesNewRoman, labels[i], color[0]));
-                            }
-                        }
-                    }
-                    break;
-                case SDL_MOUSEBUTTONDOWN:
-                    x = event.button.x;
-                    y = event.button.y;
-                    for(int i = 0; i < NUMMENU; i += 1) {
-                        if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h)
-                        {
-                            SDL_DestroyTexture(menus[0]);
-                            SDL_DestroyTexture(menus[1]);
-                            return i;
-                        }
-                    }
-                    break;
+                    return EXIT;
                 case SDL_KEYDOWN:
                     if(event.key.keysym.sym == SDLK_ESCAPE)
                     {
                         SDL_DestroyTexture(menus[0]);
                         SDL_DestroyTexture(menus[1]);
-                        return 0;
+                        return EXIT;
                     }
                     if (event.key.keysym.sym == SDLK_UP || event.key.keysym.sym == SDLK_w) {
-                        // TODO: add navigation through menu
+                        SDL_DestroyTexture(menus[selectedEntry]);
+                        menus[selectedEntry] = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Solid(timesNewRoman, labels[selectedEntry], color[0]));
+                        selectedEntry = (selectedEntry - 1 + 3) % NR_MENU_ITEMS;
+                        SDL_DestroyTexture(menus[selectedEntry]);
+                        menus[selectedEntry] = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Solid(timesNewRoman, labels[selectedEntry], color[1]));
                     }
                     if (event.key.keysym.sym == SDLK_DOWN || event.key.keysym.sym == SDLK_s) {
-                        // TODO: add navigation through menu
+                        SDL_DestroyTexture(menus[selectedEntry]);
+                        menus[selectedEntry] = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Solid(timesNewRoman, labels[selectedEntry], color[0]));
+                        selectedEntry = (selectedEntry + 1) % NR_MENU_ITEMS;
+                        SDL_DestroyTexture(menus[selectedEntry]);
+                        menus[selectedEntry] = SDL_CreateTextureFromSurface(ren, TTF_RenderText_Solid(timesNewRoman, labels[selectedEntry], color[1]));
+                    }
+                    if (event.key.keysym.sym == SDLK_KP_ENTER || event.key.keysym.sym == SDLK_RETURN) {
+                        switch (selectedEntry) {
+                            case 0:
+                                return NEW_GAME;
+                            case 1:
+                                return SELECT_LEVEL;
+                            case 2:
+                            default:
+                                return EXIT;
+                        }
                     }
             }
         }
         SDL_RenderClear(ren);
-        for(int i = 0; i < NUMMENU; i++) {
+        for(int i = 0; i < NR_MENU_ITEMS; i++) {
             SDL_RenderCopy(ren, menus[i], NULL, &pos[i]);
         }
         SDL_RenderPresent(ren);

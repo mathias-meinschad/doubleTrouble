@@ -1,6 +1,6 @@
 #include "Level.hpp"
 
-Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *staticEnemyTexture) {
+Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *staticEnemyTexture, SDL_Texture *finishFlagTexture) {
     std::ifstream inputFile(filePath);
     if (!inputFile) {
         // TODO remove this
@@ -23,9 +23,21 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
 
     getline(inputFile, line);
     while (getline(inputFile, line)) {
+        if (line.empty()) {
+            break;
+        }
+        
         if (3 != std::sscanf(line.c_str(),"%d,%d,%f", &x, &y, &scale)) {
             std::cout << "Check level file \n";
         }
         staticEnemies.emplace_back(Coordinates(x, y), staticEnemyTexture, scale);
+    }
+
+    getline(inputFile, line);
+    while (getline(inputFile, line)) {
+        if (3 != std::sscanf(line.c_str(),"%d,%d,%f", &x, &y, &scale)) {
+            std::cout << "Check level file \n";
+        }
+        finishElements.emplace_back(Coordinates(x, y), finishFlagTexture, scale);
     }
 }

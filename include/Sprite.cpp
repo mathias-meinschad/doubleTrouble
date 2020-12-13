@@ -43,3 +43,8 @@ void Sprite::calculateCurrentPosition() {
 void Sprite::render(SDL_Renderer *ren) {
     renderTexture(currentTexture, ren, position, textureScale, direction == LEFT);
 }
+
+void Sprite::resetPosition(Coordinates pos) {
+    position.x = pos.x;
+    position.y = pos.y;
+}

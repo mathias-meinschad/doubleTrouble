@@ -15,7 +15,7 @@ public:
     ~Sprite();
     void calculateCurrentPosition();
     void render(SDL_Renderer *ren);
-
+    void resetPosition(Coordinates pos);
 
     Direction direction;
     int numOfSpriteAnimations;
@@ -34,8 +34,6 @@ public:
     bool grounded = false;
     Uint64 animationLastUpdated = 0;
     Uint64 lastJump = 0;
-
-    void render();
 };
 
 

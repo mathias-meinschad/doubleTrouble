@@ -50,11 +50,15 @@ SDL_Texture *loadTexture(SDL_Renderer *ren, const char *filePath) {
     return tex;
 }
 
+// TODO make method in level class for this
 void drawLevel(SDL_Renderer *ren, Level &level) {
     for (auto &wall : level.walls) {
         renderTexture(wall.texture, ren, wall.position, wall.textureScale);
     }
     for (auto &staticEnemy : level.staticEnemies) {
         renderTexture(staticEnemy.texture, ren, staticEnemy.position, staticEnemy.textureScale);
+    }
+    for (auto &finishElement : level.finishElements) {
+        renderTexture(finishElement.texture, ren, finishElement.position, finishElement.textureScale);
     }
 }

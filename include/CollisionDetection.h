@@ -7,6 +7,6 @@
 
 bool wallCollisionDetection(Sprite &sprite, std::list<Wall> &walls);
 
-bool enemyCollisionDetection(Sprite &sprite, std::list<StaticEnemy> &enemies);
+bool otherCollisionDetection(Sprite &sprite, std::list<LevelObjects> &objects);
 
 #endif //DOUBLE_TROUBLE_COLLISIONDETECTION_H
