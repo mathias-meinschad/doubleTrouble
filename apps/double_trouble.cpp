@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <filesystem>
 #include "SDL2/SDL.h"
 #include "../include/KeyboardHandler.hpp"
 #include "../include/SdlHelpers.hpp"
@@ -18,15 +19,26 @@ int main() {
         std::cout << TTF_GetError() << "\n";
     }
 
+    int levelsUnlocked;
+    if (std::filesystem::exists(PATH_TO_SAVED_GAME)) {
+        std::ifstream savedGameFile(PATH_TO_SAVED_GAME);
+        std::string line;
+        getline(savedGameFile, line);
+        levelsUnlocked = (int) std::strtol(line.c_str(), nullptr, 10);
+    } else {
+        std::ofstream savedGameFile(PATH_TO_SAVED_GAME);
+        savedGameFile << "1\n";
+        levelsUnlocked = 1;
+    }
 
-    SDL_Texture *player1AnmiationSprites[2];
-    player1AnmiationSprites[0] = loadTexture(ren,
+    SDL_Texture *player1AnimationSprites[2];
+    player1AnimationSprites[0] = loadTexture(ren,
                                              "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_walk1.bmp");
-    player1AnmiationSprites[1] = loadTexture(ren,
+    player1AnimationSprites[1] = loadTexture(ren,
                                              "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_walk2.bmp");
     SDL_Event e;
-    Sprite player1(RIGHT, 2, Coordinates(200, 0), player1AnmiationSprites, 0.25f);
-    Sprite player2(RIGHT, 2, Coordinates(200, 370), player1AnmiationSprites, 0.25f);
+    Sprite player1(RIGHT, 2, Coordinates(200, 0), player1AnimationSprites, 0.25f);
+    Sprite player2(RIGHT, 2, Coordinates(200, 370), player1AnimationSprites, 0.25f);
     player1.slideTexture = loadTexture(ren,
                                        "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_slide.bmp");
     player1.idleTexture = loadTexture(ren,
@@ -46,28 +58,58 @@ int main() {
                                                  "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/finish_flag.bmp");
 
     std::string level1File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level1.txt");
-    Level level1(level1File, wallTexture, lavaTexture, finishFlagTexture);;
+    Level level1(level1File, wallTexture, lavaTexture, finishFlagTexture);
     std::string level2File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level2.txt");
-    Level level2(level2File, wallTexture, lavaTexture, finishFlagTexture);;
-    Level levels[2];
+    Level level2(level2File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level3File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level3.txt");
+    Level level3(level3File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level4File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level4.txt");
+    Level level4(level4File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level5File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level5.txt");
+    Level level5(level5File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level6File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level6.txt");
+    Level level6(level6File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level7File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level7.txt");
+    Level level7(level7File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level8File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level8.txt");
+    Level level8(level8File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level9File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level9.txt");
+    Level level9(level9File, wallTexture, lavaTexture, finishFlagTexture);
+    std::string level10File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level10.txt");
+    Level level10(level10File, wallTexture, lavaTexture, finishFlagTexture);
+    Level levels[10];
     levels[0] = level1;
     levels[1] = level2;
+    levels[2] = level3;
+    levels[3] = level4;
+    levels[4] = level5;
+    levels[5] = level6;
+    levels[6] = level7;
+    levels[7] = level8;
+    levels[8] = level9;
+    levels[9] = level10;
     int currentLevel = 0;
-    int maxLevel = 1;
+    int maxLevel = 9;
     bool quit = false;
-    
-    MenuEntries selectedEntry = showmenu(ren);
-    if (selectedEntry == NEW_GAME) {
-        currentLevel = 0;
-    }
-    if (selectedEntry == EXIT) {
-        return EXIT_SUCCESS;
-    }
 
     // Background colour
-    SDL_SetRenderDrawColor(ren, 70, 70, 70, 0);
     bool levelDone = false;
+    int showLevelInfo = SDL_GetTicks();
+    bool openMenu = true;
     while (!quit) {
+        if (openMenu) {
+            openMenu = false;
+            if (showMainMenu(ren, currentLevel, levelsUnlocked) == EXIT) {
+                return EXIT_SUCCESS;
+            }
+            showLevelInfo = SDL_GetTicks();
+            player1.resetPosition(Coordinates(200,0));
+            player2.resetPosition(Coordinates(200,370));
+            continue;
+        }
+
+        SDL_SetRenderDrawColor(ren, 70, 70, 70, 0);
+        
         while (SDL_PollEvent(&e)) {
             KeyboardHandler::handleKeyboardEvent(e);
             if (e.type == SDL_KEYDOWN) {
@@ -83,6 +125,10 @@ int main() {
                             player2.velocity_y += JUMP_POWER;
                             player2.lastJump = SDL_GetTicks();
                         }
+                        break;
+                    case SDLK_ESCAPE:
+                        openMenu = true;
+                        break;
                 }
             }
         }
@@ -115,10 +161,6 @@ int main() {
             player2.direction = NONE;
         }
 
-        if (KeyboardHandler::isPressed(SDLK_ESCAPE)) {
-            quit = true;
-        }
-
         if (!player1.grounded) {
             player1.position.y -= (int) player1.velocity_y;
             player1.velocity_y += GRAVITY;
@@ -148,22 +190,31 @@ int main() {
         }
 
         if (otherCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
-            quit = true;
+            player1.resetPosition(Coordinates(200,0));
+            player2.resetPosition(Coordinates(200,370));
+            showLevelInfo = SDL_GetTicks();
         }
 
         if (otherCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
-            quit = true;
+            player1.resetPosition(Coordinates(200,0));
+            player2.resetPosition(Coordinates(200,370));
+            showLevelInfo = SDL_GetTicks();
         }
 
         if (otherCollisionDetection(player1, levels[currentLevel].finishElements)
             && otherCollisionDetection(player2, levels[currentLevel].finishElements)) {
+            if (currentLevel + 1 == levelsUnlocked) {
+                std::ofstream savedGameFile(PATH_TO_SAVED_GAME);
+                levelsUnlocked++;
+                savedGameFile << levelsUnlocked << "\n";
+            }
             levelDone = true;
         }
 
-        player1.position.x += player1.velocity_x;
+        player1.position.x += (int) player1.velocity_x;
         player1.velocity_x = 0;
 
-        player2.position.x += player2.velocity_x;
+        player2.position.x += (int) player2.velocity_x;
         player2.velocity_x = 0;
 
         // Drawing Phase
@@ -173,6 +224,9 @@ int main() {
         player1.render(ren);
         player2.render(ren);
         drawLevel(ren, levels[currentLevel]);
+        if (showLevelInfo + SHOW_CURRENT_LEVEL_TIME_MS > SDL_GetTicks()) {
+            levels[currentLevel].RenderLevelInfo(ren);
+        }
         SDL_RenderPresent(ren);
         
         if (levelDone) {
@@ -182,7 +236,8 @@ int main() {
                 player1.resetPosition(Coordinates(200,0));
                 player2.resetPosition(Coordinates(200,370));
                 levelDone = false;
-                currentLevel += 1;    
+                currentLevel += 1;
+                showLevelInfo = SDL_GetTicks();
             }
         }
     }
@@ -192,22 +247,24 @@ int main() {
         SDL_RenderClear(ren);
         SDL_Texture *congratsTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/congrats.bmp");
         SDL_Rect textureBox;
-        SDL_QueryTexture(congratsTexture, NULL, NULL, &textureBox.w, &textureBox.h);
+        SDL_QueryTexture(congratsTexture, nullptr, nullptr, &textureBox.w, &textureBox.h);
         Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w * 0.4f / 2 ,SCREEN_HEIGHT / 2 - textureBox.h * 0.4f / 2);
         renderTexture(congratsTexture, ren, gameOverCoordinates, 0.4f);
         SDL_RenderPresent(ren);
-        SDL_Delay(5000);
+        SDL_Delay(4000);
         SDL_DestroyTexture(congratsTexture);
-    } else {
-        SDL_Texture *gameOverTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/game_over.bmp");
-        SDL_Rect textureBox;
-        SDL_QueryTexture(gameOverTexture, NULL, NULL, &textureBox.w, &textureBox.h);
-        Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w / 2,SCREEN_HEIGHT / 2 - textureBox.h / 2);
-        renderTexture(gameOverTexture, ren, gameOverCoordinates, 1.0f);
-        SDL_RenderPresent(ren);
-        SDL_Delay(1000);
-        SDL_DestroyTexture(gameOverTexture);
-    }
+    } 
+    // Game Over screen probably not needed
+//    else {
+//        SDL_Texture *gameOverTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/game_over.bmp");
+//        SDL_Rect textureBox;
+//        SDL_QueryTexture(gameOverTexture, nullptr, nullptr, &textureBox.w, &textureBox.h);
+//        Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w / 2,SCREEN_HEIGHT / 2 - textureBox.h / 2);
+//        renderTexture(gameOverTexture, ren, gameOverCoordinates, 1.0f);
+//        SDL_RenderPresent(ren);
+//        SDL_Delay(1000);
+//        SDL_DestroyTexture(gameOverTexture);
+//    }
     
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);

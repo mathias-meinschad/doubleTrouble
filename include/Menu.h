@@ -4,15 +4,17 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 #include "Constants.hpp"
+#include "SdlHelpers.hpp"
 
 enum MenuEntries {
-    NEW_GAME = 0,
-    SELECT_LEVEL = 1,
-    EXIT = 2,
+    NEW_GAME,
+    SELECT_LEVEL,
+    PREVIOUS_MENU,
+    EXIT,
 };
 
 const int NR_MENU_ITEMS = 3;
 
-MenuEntries showmenu(SDL_Renderer* ren);
+MenuEntries showMainMenu(SDL_Renderer* ren, int &currentLevel, int &levelsUnlocked);
 
 #endif //DOUBLE_TROUBLE_MENU_H
