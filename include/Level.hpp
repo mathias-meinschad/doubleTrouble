@@ -13,12 +13,13 @@
 
 struct Level {
     Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *staticEnemyTexture, SDL_Texture *finishFlagTexture);
-    Level() = default;
     void RenderLevelInfo(SDL_Renderer* ren);
 
     std::list<Wall> walls;
     std::list<LevelObjects> staticEnemies;
     std::list<LevelObjects> finishElements;
+    Coordinates startingPosPlayer1 = Coordinates(0,0);
+    Coordinates startingPosPlayer2 = Coordinates(0,0);
     std::string name;
 };
 

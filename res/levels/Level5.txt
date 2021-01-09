@@ -85,3 +85,7 @@ staticEnemies
 finishElements
 580,320,0.04
 580,670,0.04
+
+startingPosition
+100,20
+100,370

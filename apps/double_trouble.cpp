@@ -77,17 +77,7 @@ int main() {
     Level level9(level9File, wallTexture, lavaTexture, finishFlagTexture);
     std::string level10File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level10.txt");
     Level level10(level10File, wallTexture, lavaTexture, finishFlagTexture);
-    Level levels[10];
-    levels[0] = level1;
-    levels[1] = level2;
-    levels[2] = level3;
-    levels[3] = level4;
-    levels[4] = level5;
-    levels[5] = level6;
-    levels[6] = level7;
-    levels[7] = level8;
-    levels[8] = level9;
-    levels[9] = level10;
+    Level levels[NR_OF_LEVELS] = {level1,level2,level3,level4,level5,level6,level7,level8,level9,level10};
     int currentLevel = 0;
     int maxLevel = 9;
     bool quit = false;
@@ -103,8 +93,8 @@ int main() {
                 return EXIT_SUCCESS;
             }
             showLevelInfo = SDL_GetTicks();
-            player1.resetPosition(Coordinates(200,0));
-            player2.resetPosition(Coordinates(200,370));
+            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
+            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
             continue;
         }
 
@@ -189,15 +179,17 @@ int main() {
             player2.grounded = false;
         }
 
+        // todo refactor this
         if (otherCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
-            player1.resetPosition(Coordinates(200,0));
-            player2.resetPosition(Coordinates(200,370));
+            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
+            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
             showLevelInfo = SDL_GetTicks();
         }
 
+        // todo refactor this
         if (otherCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
-            player1.resetPosition(Coordinates(200,0));
-            player2.resetPosition(Coordinates(200,370));
+            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
+            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
             showLevelInfo = SDL_GetTicks();
         }
 
@@ -233,8 +225,8 @@ int main() {
             if (currentLevel == maxLevel) {
                 quit = true;
             } else {
-                player1.resetPosition(Coordinates(200,0));
-                player2.resetPosition(Coordinates(200,370));
+                player1.resetPosition(levels[currentLevel].startingPosPlayer1);
+                player2.resetPosition(levels[currentLevel].startingPosPlayer2);
                 levelDone = false;
                 currentLevel += 1;
                 showLevelInfo = SDL_GetTicks();
@@ -243,29 +235,18 @@ int main() {
     }
     
     // todo refactor this
-    if (levelDone) {
-        SDL_RenderClear(ren);
-        SDL_Texture *congratsTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/congrats.bmp");
-        SDL_Rect textureBox;
-        SDL_QueryTexture(congratsTexture, nullptr, nullptr, &textureBox.w, &textureBox.h);
-        Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w * 0.4f / 2 ,SCREEN_HEIGHT / 2 - textureBox.h * 0.4f / 2);
-        renderTexture(congratsTexture, ren, gameOverCoordinates, 0.4f);
-        SDL_RenderPresent(ren);
-        SDL_Delay(4000);
-        SDL_DestroyTexture(congratsTexture);
-    } 
-    // Game Over screen probably not needed
-//    else {
-//        SDL_Texture *gameOverTexture = loadTexture(ren, "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/game_over.bmp");
-//        SDL_Rect textureBox;
-//        SDL_QueryTexture(gameOverTexture, nullptr, nullptr, &textureBox.w, &textureBox.h);
-//        Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w / 2,SCREEN_HEIGHT / 2 - textureBox.h / 2);
-//        renderTexture(gameOverTexture, ren, gameOverCoordinates, 1.0f);
-//        SDL_RenderPresent(ren);
-//        SDL_Delay(1000);
-//        SDL_DestroyTexture(gameOverTexture);
-//    }
-    
+    SDL_RenderClear(ren);
+    SDL_Texture *congratsTexture = loadTexture(ren,
+                                               "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/congrats.bmp");
+    SDL_Rect textureBox;
+    SDL_QueryTexture(congratsTexture, nullptr, nullptr, &textureBox.w, &textureBox.h);
+    Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w * 0.4f / 2,
+                                    SCREEN_HEIGHT / 2 - textureBox.h * 0.4f / 2);
+    renderTexture(congratsTexture, ren, gameOverCoordinates, 0.4f);
+    SDL_RenderPresent(ren);
+    SDL_Delay(4000);
+    SDL_DestroyTexture(congratsTexture);
+
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     SDL_Quit();
