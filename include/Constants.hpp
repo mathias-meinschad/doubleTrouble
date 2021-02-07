@@ -14,6 +14,6 @@ const int SHOW_CURRENT_LEVEL_TIME_MS = 3000;
 
 const int NR_OF_LEVELS = 10;
 
-const std::string PATH_TO_SAVED_GAME = "/home/mathi/workspace/advanced_c++/double_trouble/res/levels/unlockedLevels.txt";
+const std::string PATH_TO_SAVED_GAME = "res/levels/unlockedLevels.txt";
 
 #endif //DOUBLE_TROUBLE_CONSTANTS_HPP

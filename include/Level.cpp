@@ -60,7 +60,7 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
 }
 
 void Level::RenderLevelInfo(SDL_Renderer* ren) {
-    TTF_Font* timesNewRoman = TTF_OpenFont("/home/mathi/workspace/advanced_c++/double_trouble/res/fonts/times_new_roman.ttf", 50);
+    TTF_Font* timesNewRoman = TTF_OpenFont("res/fonts/times_new_roman.ttf", 50);
     if (!timesNewRoman) {
         std::cout << TTF_GetError() << "\n";
     }

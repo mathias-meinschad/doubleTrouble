@@ -9,6 +9,8 @@
 #include "../include/Menu.h"
 
 int main() {
+    std::cout << std::filesystem::current_path() << std::endl;
+    
     SDL_Window *win;
     SDL_Renderer *ren;
     if (!init(win, ren)) {
@@ -33,49 +35,49 @@ int main() {
 
     SDL_Texture *player1AnimationSprites[2];
     player1AnimationSprites[0] = loadTexture(ren,
-                                             "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_walk1.bmp");
+                                             "res/tiles/Player/player_walk1.bmp");
     player1AnimationSprites[1] = loadTexture(ren,
-                                             "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_walk2.bmp");
+                                             "res/tiles/Player/player_walk2.bmp");
     SDL_Event e;
     Sprite player1(RIGHT, 2, Coordinates(200, 0), player1AnimationSprites, 0.25f);
     Sprite player2(RIGHT, 2, Coordinates(200, 370), player1AnimationSprites, 0.25f);
     player1.slideTexture = loadTexture(ren,
-                                       "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_slide.bmp");
+                                       "res/tiles/Player/player_slide.bmp");
     player1.idleTexture = loadTexture(ren,
-                                      "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_idle.bmp");
+                                      "res/tiles/Player/player_idle.bmp");
     player2.slideTexture = loadTexture(ren,
-                                       "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_slide.bmp");
+                                       "res/tiles/Player/player_slide.bmp");
     player2.idleTexture = loadTexture(ren,
-                                      "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Player/player_idle.bmp");
+                                      "res/tiles/Player/player_idle.bmp");
 
     SDL_Texture *wallTexture = loadTexture(ren,
-                                           "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Walls/simple_wall.bmp");
+                                           "res/tiles/Walls/simple_wall.bmp");
 
     SDL_Texture *lavaTexture = loadTexture(ren,
-                                           "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Walls/simple_lava.bmp");
+                                           "res/tiles/Walls/simple_lava.bmp");
 
     SDL_Texture *finishFlagTexture = loadTexture(ren,
-                                                 "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/finish_flag.bmp");
+                                                 "res/tiles/Other/finish_flag.bmp");
 
-    std::string level1File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level1.txt");
+    std::string level1File("res/levels/Level1.txt");
     Level level1(level1File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level2File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level2.txt");
+    std::string level2File("res/levels/Level2.txt");
     Level level2(level2File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level3File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level3.txt");
+    std::string level3File("res/levels/Level3.txt");
     Level level3(level3File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level4File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level4.txt");
+    std::string level4File("res/levels/Level4.txt");
     Level level4(level4File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level5File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level5.txt");
+    std::string level5File("res/levels/Level5.txt");
     Level level5(level5File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level6File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level6.txt");
+    std::string level6File("res/levels/Level6.txt");
     Level level6(level6File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level7File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level7.txt");
+    std::string level7File("res/levels/Level7.txt");
     Level level7(level7File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level8File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level8.txt");
+    std::string level8File("res/levels/Level8.txt");
     Level level8(level8File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level9File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level9.txt");
+    std::string level9File("res/levels/Level9.txt");
     Level level9(level9File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level10File("/home/mathi/workspace/advanced_c++/double_trouble/res/levels/Level10.txt");
+    std::string level10File("res/levels/Level10.txt");
     Level level10(level10File, wallTexture, lavaTexture, finishFlagTexture);
     Level levels[NR_OF_LEVELS] = {level1,level2,level3,level4,level5,level6,level7,level8,level9,level10};
     int currentLevel = 0;
@@ -181,6 +183,7 @@ int main() {
 
         // todo refactor this
         if (otherCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
+            SDL_Delay(500);
             player1.resetPosition(levels[currentLevel].startingPosPlayer1);
             player2.resetPosition(levels[currentLevel].startingPosPlayer2);
             showLevelInfo = SDL_GetTicks();
@@ -188,6 +191,7 @@ int main() {
 
         // todo refactor this
         if (otherCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
+            SDL_Delay(500);
             player1.resetPosition(levels[currentLevel].startingPosPlayer1);
             player2.resetPosition(levels[currentLevel].startingPosPlayer2);
             showLevelInfo = SDL_GetTicks();
@@ -237,7 +241,7 @@ int main() {
     // todo refactor this
     SDL_RenderClear(ren);
     SDL_Texture *congratsTexture = loadTexture(ren,
-                                               "/home/mathi/workspace/advanced_c++/double_trouble/res/tiles/Other/congrats.bmp");
+                                               "res/tiles/Other/congrats.bmp");
     SDL_Rect textureBox;
     SDL_QueryTexture(congratsTexture, nullptr, nullptr, &textureBox.w, &textureBox.h);
     Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w * 0.4f / 2,
