@@ -26,10 +26,6 @@ SDL2/SDL.h
 ../include/Menu.h
 /home/mathi/workspace/double_trouble/include/Menu.h
 
-/home/mathi/workspace/double_trouble/include/CollisionDetection.cpp
-CollisionDetection.h
-/home/mathi/workspace/double_trouble/include/CollisionDetection.h
-
 /home/mathi/workspace/double_trouble/include/CollisionDetection.h
 list
 -
@@ -43,10 +39,6 @@ Sprite.hpp
 /home/mathi/workspace/double_trouble/include/KeyboardHandler.hpp
 SDL.h
 /home/mathi/workspace/double_trouble/include/SDL.h
-
-/home/mathi/workspace/double_trouble/include/Level.cpp
-Level.hpp
-/home/mathi/workspace/double_trouble/include/Level.hpp
 
 /home/mathi/workspace/double_trouble/include/Level.hpp
 string
@@ -68,21 +60,11 @@ SDL_ttf.h
 Constants.hpp
 /home/mathi/workspace/double_trouble/include/Constants.hpp
 
-/home/mathi/workspace/double_trouble/include/LevelObject.cpp
-LevelObject.hpp
-/home/mathi/workspace/double_trouble/include/LevelObject.hpp
-
 /home/mathi/workspace/double_trouble/include/LevelObject.hpp
 iostream
 -
 SDL.h
 /home/mathi/workspace/double_trouble/include/SDL.h
-
-/home/mathi/workspace/double_trouble/include/Menu.cpp
-iostream
--
-Menu.h
-/home/mathi/workspace/double_trouble/include/Menu.h
 
 /home/mathi/workspace/double_trouble/include/Menu.h
 SDL.h
@@ -91,10 +73,6 @@ SDL_ttf.h
 /home/mathi/workspace/double_trouble/include/SDL_ttf.h
 Constants.hpp
 /home/mathi/workspace/double_trouble/include/Constants.hpp
-SdlHelpers.hpp
-/home/mathi/workspace/double_trouble/include/SdlHelpers.hpp
-
-/home/mathi/workspace/double_trouble/include/SdlHelpers.cpp
 SdlHelpers.hpp
 /home/mathi/workspace/double_trouble/include/SdlHelpers.hpp
 
@@ -107,14 +85,6 @@ Level.hpp
 /home/mathi/workspace/double_trouble/include/Level.hpp
 Constants.hpp
 /home/mathi/workspace/double_trouble/include/Constants.hpp
-
-/home/mathi/workspace/double_trouble/include/Sprite.cpp
-Sprite.hpp
-/home/mathi/workspace/double_trouble/include/Sprite.hpp
-Constants.hpp
-/home/mathi/workspace/double_trouble/include/Constants.hpp
-SdlHelpers.hpp
-/home/mathi/workspace/double_trouble/include/SdlHelpers.hpp
 
 /home/mathi/workspace/double_trouble/include/Sprite.hpp
 LevelObject.hpp

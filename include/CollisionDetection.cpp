@@ -19,6 +19,15 @@ bool collisionBelow(Sprite &sprite, LevelObjects &object) {
     return false;
 }
 
+bool collisionBelow(Sprite &sprite, Sprite &sprite2) {
+    if (sprite.position.y + sprite.height > sprite2.position.y && sprite.position.y < sprite2.position.y + sprite2.height) {
+        if (sprite.position.x + sprite.width > sprite2.position.x && sprite.position.x < sprite2.position.x + sprite2.width) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool wallCollisionTop(Sprite &sprite, LevelObjects &object) {
     if (sprite.position.y < object.position.y + object.height + 2 && sprite.position.y + sprite.height > object.position.y) {
         if (sprite.position.x + sprite.width > object.position.x && sprite.position.x < object.position.x + object.width) {
@@ -31,6 +40,15 @@ bool wallCollisionTop(Sprite &sprite, LevelObjects &object) {
 bool collisionTop(Sprite &sprite, LevelObjects &object) {
     if (sprite.position.y < object.position.y + object.height && sprite.position.y + sprite.height > object.position.y) {
         if (sprite.position.x + sprite.width > object.position.x && sprite.position.x < object.position.x + object.width) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool collisionTop(Sprite &sprite, Sprite &sprite2) {
+    if (sprite.position.y < sprite2.position.y + sprite2.height && sprite.position.y + sprite.height > sprite2.position.y) {
+        if (sprite.position.x + sprite.width > sprite2.position.x && sprite.position.x < sprite2.position.x + sprite2.width) {
             return true;
         }
     }
@@ -54,6 +72,16 @@ bool collisionRight(Sprite &sprite, LevelObjects &object) {
     }
     return false;
 }
+
+bool collisionRight(Sprite &sprite, Sprite &sprite2) {
+    if (sprite.position.y + sprite.height > sprite2.position.y && sprite.position.y < sprite2.position.y + sprite2.height) {
+        if (sprite.position.x + sprite.width > sprite2.position.x && sprite.position.x < sprite2.position.x + sprite2.width) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool wallCollisionLeft(Sprite &sprite, LevelObjects &object) {
     if (sprite.position.y + sprite.height > object.position.y && sprite.position.y < object.position.y + object.height) {
         if (sprite.position.x < object.position.x + object.width + 2 && sprite.position.x + sprite.width > object.position.x) {
@@ -66,6 +94,15 @@ bool wallCollisionLeft(Sprite &sprite, LevelObjects &object) {
 bool collisionLeft(Sprite &sprite, LevelObjects &object) {
     if (sprite.position.y + sprite.height > object.position.y && sprite.position.y < object.position.y + object.height) {
         if (sprite.position.x < object.position.x + object.width && sprite.position.x + sprite.width > object.position.x) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool collisionLeft(Sprite &sprite, Sprite &sprite2) {
+    if (sprite.position.y + sprite.height > sprite2.position.y && sprite.position.y < sprite2.position.y + sprite2.height) {
+        if (sprite.position.x < sprite2.position.x + sprite2.width && sprite.position.x + sprite.width > sprite2.position.x) {
             return true;
         }
     }
@@ -106,12 +143,20 @@ bool wallCollisionDetection(Sprite &sprite, std::list<Wall> &walls) {
     return collision;
 }
 
-bool otherCollisionDetection(Sprite &sprite, std::list<LevelObjects> &objects) {
+bool objectCollisionDetection(Sprite &sprite, std::list<LevelObjects> &objects) {
     for (auto &object : objects) {
         if (collisionBelow(sprite, object) || collisionTop(sprite, object) || collisionLeft(sprite, object) ||
             collisionRight(sprite, object)) {
             return true;
         }
+    }
+    return false;
+}
+
+bool spriteCollisionDetection(Sprite &sprite, Sprite& sprite2) {
+    if (collisionBelow(sprite, sprite2) || collisionTop(sprite, sprite2) || collisionLeft(sprite, sprite2) ||
+        collisionRight(sprite, sprite2)) {
+        return true;
     }
     return false;
 }

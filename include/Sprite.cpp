@@ -2,9 +2,8 @@
 #include "Constants.hpp"
 #include "SdlHelpers.hpp"
 
-Sprite::Sprite(Direction direction, int numOfSpriteAnimations, Coordinates pos, SDL_Texture **tex, float scale)
-        : direction(
-        direction), numOfSpriteAnimations(numOfSpriteAnimations), position(pos) {
+Sprite::Sprite(Direction direction, int numOfSpriteAnimations, SDL_Texture **tex, float scale)
+        : direction(direction), numOfSpriteAnimations(numOfSpriteAnimations) {
     animationTextures = (SDL_Texture **) malloc(sizeof(SDL_Texture *) * numOfSpriteAnimations);
     for (int i = 0; i < numOfSpriteAnimations; i++) {
         animationTextures[i] = tex[i];
@@ -23,7 +22,7 @@ Sprite::~Sprite() {
     free(animationTextures);
 }
 
-void Sprite::calculateCurrentPosition() {
+void Sprite::calculateCurrentAnimation() {
     if (animationLastUpdated + ANIMATION_SPEED_IN_MS < SDL_GetTicks()) {
         if (direction == LEFT || direction == RIGHT) {
             if (grounded && !sliding) {

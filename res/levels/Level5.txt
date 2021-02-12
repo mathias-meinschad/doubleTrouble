@@ -398,3 +398,7 @@ finishElements
 startingPosition
 100,200
 100,550
+
+startingPositionZombies
+-100,-100
+-100,-100

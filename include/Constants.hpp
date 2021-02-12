@@ -10,6 +10,8 @@ const float GRAVITY = -1.0f;
 const float JUMP_POWER = 15.0f;
 const int JUMP_TICKS = 500;
 
+const float ZOMBIE_VELOCITY = 1.0f;
+
 const int SHOW_CURRENT_LEVEL_TIME_MS = 3000;
 
 const int NR_OF_LEVELS = 10;

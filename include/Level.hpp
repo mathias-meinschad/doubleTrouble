@@ -18,8 +18,11 @@ struct Level {
     std::list<Wall> walls;
     std::list<LevelObjects> staticEnemies;
     std::list<LevelObjects> finishElements;
+    // defaulted
     Coordinates startingPosPlayer1 = Coordinates(0,0);
     Coordinates startingPosPlayer2 = Coordinates(0,0);
+    Coordinates startingPosZombie1 = Coordinates(0,0);
+    Coordinates startingPosZombie2 = Coordinates(0,0);
     std::string name;
 };
 

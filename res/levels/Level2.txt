@@ -155,6 +155,8 @@ walls:
 1245,680,0.5
 500,325,0.5
 400,665,0.5
+700,325,0.5
+850,665,0.5
 
 staticEnemies
 
@@ -165,3 +167,7 @@ finishElements
 startingPosition
 100,20
 100,370
+
+startingPositionZombies
+600,321
+500,661

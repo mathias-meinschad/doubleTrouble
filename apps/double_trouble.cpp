@@ -34,30 +34,31 @@ int main() {
     }
 
     SDL_Texture *player1AnimationSprites[2];
-    player1AnimationSprites[0] = loadTexture(ren,
-                                             "res/tiles/Player/player_walk1.bmp");
-    player1AnimationSprites[1] = loadTexture(ren,
-                                             "res/tiles/Player/player_walk2.bmp");
+    player1AnimationSprites[0] = loadTexture(ren,"res/tiles/Player/player_walk1.bmp");
+    player1AnimationSprites[1] = loadTexture(ren,"res/tiles/Player/player_walk2.bmp");
+    SDL_Texture *player2AnimationSprites[2];
+    player2AnimationSprites[0] = loadTexture(ren,"res/tiles/Female/female_walk1.bmp");
+    player2AnimationSprites[1] = loadTexture(ren,"res/tiles/Female/female_walk2.bmp");
+    SDL_Texture *zombieAnimationSprites[2];
+    zombieAnimationSprites[0] = loadTexture(ren,"res/tiles/Zombie/zombie_walk1.bmp");
+    zombieAnimationSprites[1] = loadTexture(ren,"res/tiles/Zombie/zombie_walk2.bmp");
     SDL_Event e;
-    Sprite player1(RIGHT, 2, Coordinates(200, 0), player1AnimationSprites, 0.25f);
-    Sprite player2(RIGHT, 2, Coordinates(200, 370), player1AnimationSprites, 0.25f);
-    player1.slideTexture = loadTexture(ren,
-                                       "res/tiles/Player/player_slide.bmp");
-    player1.idleTexture = loadTexture(ren,
-                                      "res/tiles/Player/player_idle.bmp");
-    player2.slideTexture = loadTexture(ren,
-                                       "res/tiles/Player/player_slide.bmp");
-    player2.idleTexture = loadTexture(ren,
-                                      "res/tiles/Player/player_idle.bmp");
+    Sprite player1(RIGHT, 2, player1AnimationSprites, 0.25f);
+    Sprite player2(RIGHT, 2, player2AnimationSprites, 0.25f);
+    Sprite zombie1(RIGHT, 2, zombieAnimationSprites, 0.25f);
+    Sprite zombie2(RIGHT, 2, zombieAnimationSprites, 0.25f);
+    zombie1.velocity_x = ZOMBIE_VELOCITY;
+    zombie2.velocity_x = ZOMBIE_VELOCITY;
+    zombie1.grounded = true;
+    zombie2.grounded = true;
+    player1.slideTexture = loadTexture(ren,"res/tiles/Player/player_slide.bmp");
+    player1.idleTexture = loadTexture(ren,"res/tiles/Player/player_idle.bmp");
+    player2.slideTexture = loadTexture(ren,"res/tiles/Female/female_slide.bmp");
+    player2.idleTexture = loadTexture(ren,"res/tiles/Female/female_idle.bmp");
 
-    SDL_Texture *wallTexture = loadTexture(ren,
-                                           "res/tiles/Walls/simple_wall.bmp");
-
-    SDL_Texture *lavaTexture = loadTexture(ren,
-                                           "res/tiles/Walls/simple_lava.bmp");
-
-    SDL_Texture *finishFlagTexture = loadTexture(ren,
-                                                 "res/tiles/Other/finish_flag.bmp");
+    SDL_Texture *wallTexture = loadTexture(ren,"res/tiles/Walls/simple_wall.bmp");
+    SDL_Texture *lavaTexture = loadTexture(ren,"res/tiles/Walls/simple_lava.bmp");
+    SDL_Texture *finishFlagTexture = loadTexture(ren,"res/tiles/Other/finish_flag.bmp");
 
     std::string level1File("res/levels/Level1.txt");
     Level level1(level1File, wallTexture, lavaTexture, finishFlagTexture);
@@ -97,6 +98,12 @@ int main() {
             showLevelInfo = SDL_GetTicks();
             player1.resetPosition(levels[currentLevel].startingPosPlayer1);
             player2.resetPosition(levels[currentLevel].startingPosPlayer2);
+            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
+            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
+            zombie1.direction = RIGHT;
+            zombie2.direction = RIGHT;
+            zombie1.velocity_x = ZOMBIE_VELOCITY;
+            zombie2.velocity_x = ZOMBIE_VELOCITY;
             continue;
         }
 
@@ -181,24 +188,47 @@ int main() {
             player2.grounded = false;
         }
 
+        if (wallCollisionDetection(zombie1, levels[currentLevel].walls)) {
+            zombie1.direction = zombie1.direction == LEFT ? RIGHT : LEFT;
+            zombie1.velocity_x = zombie1.direction == LEFT ? (-ZOMBIE_VELOCITY) : ZOMBIE_VELOCITY;
+        }
+
+        if (wallCollisionDetection(zombie2, levels[currentLevel].walls)) {
+            zombie2.direction = zombie2.direction == LEFT ? RIGHT : LEFT;
+            zombie2.velocity_x = zombie2.direction == LEFT ? (-ZOMBIE_VELOCITY) : ZOMBIE_VELOCITY;
+        }
+
         // todo refactor this
-        if (otherCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
+        if (objectCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
             SDL_Delay(500);
             player1.resetPosition(levels[currentLevel].startingPosPlayer1);
             player2.resetPosition(levels[currentLevel].startingPosPlayer2);
+            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
+            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
+            zombie1.direction = RIGHT;
+            zombie2.direction = RIGHT;
+            zombie1.velocity_x = ZOMBIE_VELOCITY;
+            zombie2.velocity_x = ZOMBIE_VELOCITY;
             showLevelInfo = SDL_GetTicks();
         }
 
         // todo refactor this
-        if (otherCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
+        if (objectCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
             SDL_Delay(500);
             player1.resetPosition(levels[currentLevel].startingPosPlayer1);
             player2.resetPosition(levels[currentLevel].startingPosPlayer2);
+            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
+            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
+            zombie1.direction = RIGHT;
+            zombie2.direction = RIGHT;
+            zombie1.velocity_x = ZOMBIE_VELOCITY;
+            zombie2.velocity_x = ZOMBIE_VELOCITY;
             showLevelInfo = SDL_GetTicks();
         }
-
-        if (otherCollisionDetection(player1, levels[currentLevel].finishElements)
-            && otherCollisionDetection(player2, levels[currentLevel].finishElements)) {
+        
+        // todo refactor this
+        if (objectCollisionDetection(player1, levels[currentLevel].finishElements)
+            && objectCollisionDetection(player2, levels[currentLevel].finishElements)) {
             if (currentLevel + 1 == levelsUnlocked) {
                 std::ofstream savedGameFile(PATH_TO_SAVED_GAME);
                 levelsUnlocked++;
@@ -207,18 +237,42 @@ int main() {
             levelDone = true;
         }
 
+        // todo refactor this
+        if (spriteCollisionDetection(player1, zombie1)
+            || spriteCollisionDetection(player1, zombie2)
+            || spriteCollisionDetection(player2, zombie2)
+            || spriteCollisionDetection(player2, zombie1)) {
+            SDL_Delay(500);
+            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
+            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
+            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
+            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
+            zombie1.direction = RIGHT;
+            zombie2.direction = RIGHT;
+            zombie1.velocity_x = ZOMBIE_VELOCITY;
+            zombie2.velocity_x = ZOMBIE_VELOCITY;
+            showLevelInfo = SDL_GetTicks();
+        }
+
         player1.position.x += (int) player1.velocity_x;
         player1.velocity_x = 0;
 
         player2.position.x += (int) player2.velocity_x;
         player2.velocity_x = 0;
+        
+        zombie1.position.x += (int) zombie1.velocity_x;
+        zombie2.position.x += (int) zombie2.velocity_x;
 
         // Drawing Phase
-        player1.calculateCurrentPosition();
-        player2.calculateCurrentPosition();
+        player1.calculateCurrentAnimation();
+        player2.calculateCurrentAnimation();
+        zombie1.calculateCurrentAnimation();
+        zombie2.calculateCurrentAnimation();
         SDL_RenderClear(ren);
         player1.render(ren);
         player2.render(ren);
+        zombie1.render(ren);
+        zombie2.render(ren);
         drawLevel(ren, levels[currentLevel]);
         if (showLevelInfo + SHOW_CURRENT_LEVEL_TIME_MS > SDL_GetTicks()) {
             levels[currentLevel].RenderLevelInfo(ren);
@@ -229,10 +283,17 @@ int main() {
             if (currentLevel == maxLevel) {
                 quit = true;
             } else {
+                currentLevel += 1;
+                // TODO: refactor
                 player1.resetPosition(levels[currentLevel].startingPosPlayer1);
                 player2.resetPosition(levels[currentLevel].startingPosPlayer2);
+                zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
+                zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
+                zombie1.direction = RIGHT;
+                zombie2.direction = RIGHT;
+                zombie1.velocity_x = ZOMBIE_VELOCITY;
+                zombie2.velocity_x = ZOMBIE_VELOCITY;
                 levelDone = false;
-                currentLevel += 1;
                 showLevelInfo = SDL_GetTicks();
             }
         }

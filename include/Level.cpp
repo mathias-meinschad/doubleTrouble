@@ -57,6 +57,19 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
         std::cout << "Check level file \n";
     }
     startingPosPlayer2 = Coordinates(x, y);
+    
+    getline(inputFile, line);
+    getline(inputFile, line);
+    getline(inputFile, line);
+    if (2 != std::sscanf(line.c_str(),"%d,%d", &x, &y)) {
+        std::cout << "Check level file \n";
+    }
+    startingPosZombie1 = Coordinates(x, y);
+    getline(inputFile, line);
+    if (2 != std::sscanf(line.c_str(),"%d,%d", &x, &y)) {
+        std::cout << "Check level file \n";
+    }
+    startingPosZombie2 = Coordinates(x, y);
 }
 
 void Level::RenderLevelInfo(SDL_Renderer* ren) {

@@ -11,15 +11,15 @@ enum Direction {
 
 class Sprite {
 public:
-    Sprite(Direction direction, int numOfSpriteAnimations, Coordinates pos, SDL_Texture **tex, float scale = 1);
+    Sprite(Direction direction, int numOfSpriteAnimations, SDL_Texture **tex, float scale = 1);
     ~Sprite();
-    void calculateCurrentPosition();
+    void calculateCurrentAnimation();
     void render(SDL_Renderer *ren);
     void resetPosition(Coordinates pos);
 
     Direction direction;
     int numOfSpriteAnimations;
-    Coordinates position;
+    Coordinates position = Coordinates(0,0);
     SDL_Texture *currentTexture;
     SDL_Texture **animationTextures;
     SDL_Texture *idleTexture;
