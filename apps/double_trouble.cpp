@@ -114,6 +114,8 @@ int main() {
             if (e.type == SDL_KEYDOWN) {
                 switch (e.key.keysym.sym) {
                     case SDLK_w:
+                    case SDLK_UP:
+                    case SDLK_SPACE:
                         if (player1.lastJump + JUMP_TICKS < SDL_GetTicks()) {
                             player1.grounded = false;
                             player1.velocity_y += JUMP_POWER;
@@ -133,29 +135,30 @@ int main() {
         }
 
         // input handling/positioning phase
-        if (KeyboardHandler::isPressed(SDLK_a)) {
+        if (KeyboardHandler::isPressed(SDLK_a) || KeyboardHandler::isPressed(SDLK_LEFT)) {
             player1.direction = LEFT;
             player1.velocity_x -= 2;
             player2.direction = LEFT;
             player2.velocity_x -= 2;
         }
-        if (KeyboardHandler::isPressed(SDLK_d)) {
+        if (KeyboardHandler::isPressed(SDLK_d) || KeyboardHandler::isPressed(SDLK_RIGHT)) {
             player1.direction = RIGHT;
             player1.velocity_x += 2;
             player2.direction = RIGHT;
             player2.velocity_x += 2;
         }
-        if (KeyboardHandler::isPressed(SDLK_s)) {
+        if (KeyboardHandler::isPressed(SDLK_s) || KeyboardHandler::isPressed(SDLK_DOWN)) {
             player1.sliding = true;
             player2.sliding = true;
         }
-        if (KeyboardHandler::isReleased(SDLK_s)) {
+        if (KeyboardHandler::isReleased(SDLK_s) && KeyboardHandler::isReleased(SDLK_DOWN)) {
             player1.sliding = false;
             player2.sliding = false;
         }
 
-        if (KeyboardHandler::isReleased(SDLK_a) && KeyboardHandler::isReleased(SDLK_d) &&
-            KeyboardHandler::isReleased(SDLK_s)) {
+        if (KeyboardHandler::isReleased(SDLK_a) && KeyboardHandler::isReleased(SDLK_LEFT)
+            && KeyboardHandler::isReleased(SDLK_d) && KeyboardHandler::isReleased(SDLK_RIGHT)
+            && KeyboardHandler::isReleased(SDLK_s) && KeyboardHandler::isReleased(SDLK_DOWN)) {
             player1.direction = NONE;
             player2.direction = NONE;
         }

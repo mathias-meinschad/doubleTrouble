@@ -12,8 +12,8 @@ public:
     bool static isReleased(int keyCode) { return (keyState[keyCode] == SDL_RELEASED); };
 
 private:
-    // im using 1024 statically here, because I didnt find a way to obtain the number of elements in the enum and I think 1024 is enough (I know i waste space here ;))
-    bool inline static keyState[1024];
+    // Unfortunately I need so many entries bc the arrow symbols return this numbers in sdl
+    bool inline static keyState[1073742000] = {SDL_RELEASED};
 };
 
 #endif //DOUBLE_TROUBLE_KEYBOARDHANDLER_H
