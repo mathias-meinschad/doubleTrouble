@@ -4,37 +4,41 @@
 #include <iostream>
 #include "SDL.h"
 
-struct Coordinates {
-    Coordinates(int x, int y) : x(x), y(y) {};
+struct DrawBox {
+    int width;
+    int height;
+};
+
+struct Position {
+    Position(int x, int y) : x(x), y(y) {};
     int x;
     int y;
 };
 
 class LevelObjects {
 public:
-    LevelObjects(Coordinates position, SDL_Texture *texture, float textureScale);
+    LevelObjects(Position position, SDL_Texture *texture, float textureScale);
     virtual ~LevelObjects() {
         SDL_DestroyTexture(texture);
     }
     
-    int width;
-    int height;
+    DrawBox drawBox;
     SDL_Texture *texture;
     float textureScale;
-    Coordinates position;
+    Position position;
 };
 
 struct StaticEnemy : LevelObjects {
-    StaticEnemy(Coordinates position, SDL_Texture* texture, float textureScale)  : LevelObjects(position, texture, textureScale) {};
+    StaticEnemy(Position position, SDL_Texture* texture, float textureScale)  : LevelObjects(position, texture, textureScale) {};
 };
 
 struct Wall : LevelObjects {
-    Wall(Coordinates position, SDL_Texture *texture, float textureScale) : LevelObjects(position, texture, textureScale) {};
+    Wall(Position position, SDL_Texture *texture, float textureScale) : LevelObjects(position, texture, textureScale) {};
     bool noClip = false;
 };
 
 struct Finish : LevelObjects {
-    Finish(Coordinates position, SDL_Texture *texture, float textureScale) : LevelObjects(position, texture, textureScale) {};
+    Finish(Position position, SDL_Texture *texture, float textureScale) : LevelObjects(position, texture, textureScale) {};
 };
 
 #endif //DOUBLE_TROUBLE_LEVELOBJECT_HPP

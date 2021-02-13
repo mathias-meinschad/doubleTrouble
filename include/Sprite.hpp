@@ -15,17 +15,16 @@ public:
     ~Sprite();
     void calculateCurrentAnimation();
     void render(SDL_Renderer *ren);
-    void resetPosition(Coordinates pos);
+    void resetPosition(Position pos);
 
     Direction direction;
     int numOfSpriteAnimations;
-    Coordinates position = Coordinates(0,0);
+    Position position = Position(0, 0);
     SDL_Texture *currentTexture;
     SDL_Texture **animationTextures;
     SDL_Texture *idleTexture;
     SDL_Texture *slideTexture;
-    int height;
-    int width;
+    DrawBox drawBox;
     bool sliding = false;
     int currentAnimationNr = 0;
     float textureScale = 1;

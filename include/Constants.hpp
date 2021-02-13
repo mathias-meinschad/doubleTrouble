@@ -1,6 +1,8 @@
 #ifndef DOUBLE_TROUBLE_CONSTANTS_HPP
 #define DOUBLE_TROUBLE_CONSTANTS_HPP
 
+#include <string>
+
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 

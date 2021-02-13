@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/mathi/workspace/double_trouble/apps/double_trouble.cpp" "/home/mathi/workspace/double_trouble/CMakeFiles/double_trouble.dir/apps/double_trouble.cpp.o"
   "/home/mathi/workspace/double_trouble/include/CollisionDetection.cpp" "/home/mathi/workspace/double_trouble/CMakeFiles/double_trouble.dir/include/CollisionDetection.cpp.o"
+  "/home/mathi/workspace/double_trouble/include/GeneralHelper.cpp" "/home/mathi/workspace/double_trouble/CMakeFiles/double_trouble.dir/include/GeneralHelper.cpp.o"
   "/home/mathi/workspace/double_trouble/include/Level.cpp" "/home/mathi/workspace/double_trouble/CMakeFiles/double_trouble.dir/include/Level.cpp.o"
   "/home/mathi/workspace/double_trouble/include/LevelObject.cpp" "/home/mathi/workspace/double_trouble/CMakeFiles/double_trouble.dir/include/LevelObject.cpp.o"
   "/home/mathi/workspace/double_trouble/include/Menu.cpp" "/home/mathi/workspace/double_trouble/CMakeFiles/double_trouble.dir/include/Menu.cpp.o"

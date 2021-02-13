@@ -105,7 +105,7 @@ MenuEntries showSubMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlocke
         SDL_RenderClear(ren);
         for (int i = 0; i < NR_OF_LEVELS; i++) {
             if (i >= levelsUnlocked) {
-                Coordinates lockPosition(pos[i].x - 40, pos[i].y);
+                Position lockPosition(pos[i].x - 40, pos[i].y);
                 renderTexture(lockTexture, ren, lockPosition, 0.05);
             }
             SDL_RenderCopy(ren, menus[i], nullptr, &pos[i]);

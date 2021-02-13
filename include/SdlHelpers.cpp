@@ -29,7 +29,7 @@ void logSDLError(std::ostream &os, const std::string &msg) {
     os << msg << " error: " << SDL_GetError() << std::endl;
 }
 
-void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Coordinates &position, float scale, bool flip) {
+void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, Position &position, float scale, bool flip) {
     SDL_Rect dst;
     dst.x = position.x;
     dst.y = position.y;
@@ -51,7 +51,11 @@ SDL_Texture *loadTexture(SDL_Renderer *ren, const char *filePath) {
 }
 
 // TODO make method in level class for this
-void drawLevel(SDL_Renderer *ren, Level &level) {
+void drawLevel(SDL_Renderer *ren, Level &level, Uint64 showLevelInfoTime) {
+    if (showLevelInfoTime + SHOW_CURRENT_LEVEL_TIME_MS > SDL_GetTicks()) {
+        level.RenderLevelInfo(ren);
+    }
+    
     for (auto &wall : level.walls) {
         renderTexture(wall.texture, ren, wall.position, wall.textureScale);
     }

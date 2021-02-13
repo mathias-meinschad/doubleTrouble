@@ -7,6 +7,7 @@
 #include "../include/Sprite.hpp"
 #include "../include/CollisionDetection.h"
 #include "../include/Menu.h"
+#include "../include/GeneralHelper.hpp"
 
 int main() {
     std::cout << std::filesystem::current_path() << std::endl;
@@ -87,7 +88,7 @@ int main() {
 
     // Background colour
     bool levelDone = false;
-    int showLevelInfo = SDL_GetTicks();
+    Uint64 showLevelInfoTime = SDL_GetTicks();
     bool openMenu = true;
     while (!quit) {
         if (openMenu) {
@@ -95,15 +96,8 @@ int main() {
             if (showMainMenu(ren, currentLevel, levelsUnlocked) == EXIT) {
                 return EXIT_SUCCESS;
             }
-            showLevelInfo = SDL_GetTicks();
-            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
-            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
-            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
-            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
-            zombie1.direction = RIGHT;
-            zombie2.direction = RIGHT;
-            zombie1.velocity_x = ZOMBIE_VELOCITY;
-            zombie2.velocity_x = ZOMBIE_VELOCITY;
+            showLevelInfoTime = SDL_GetTicks();
+            resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
             continue;
         }
 
@@ -204,29 +198,15 @@ int main() {
         // todo refactor this
         if (objectCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
             SDL_Delay(500);
-            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
-            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
-            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
-            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
-            zombie1.direction = RIGHT;
-            zombie2.direction = RIGHT;
-            zombie1.velocity_x = ZOMBIE_VELOCITY;
-            zombie2.velocity_x = ZOMBIE_VELOCITY;
-            showLevelInfo = SDL_GetTicks();
+            resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
+            showLevelInfoTime = SDL_GetTicks();
         }
 
         // todo refactor this
         if (objectCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
             SDL_Delay(500);
-            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
-            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
-            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
-            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
-            zombie1.direction = RIGHT;
-            zombie2.direction = RIGHT;
-            zombie1.velocity_x = ZOMBIE_VELOCITY;
-            zombie2.velocity_x = ZOMBIE_VELOCITY;
-            showLevelInfo = SDL_GetTicks();
+            resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
+            showLevelInfoTime = SDL_GetTicks();
         }
         
         // todo refactor this
@@ -246,15 +226,8 @@ int main() {
             || spriteCollisionDetection(player2, zombie2)
             || spriteCollisionDetection(player2, zombie1)) {
             SDL_Delay(500);
-            player1.resetPosition(levels[currentLevel].startingPosPlayer1);
-            player2.resetPosition(levels[currentLevel].startingPosPlayer2);
-            zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
-            zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
-            zombie1.direction = RIGHT;
-            zombie2.direction = RIGHT;
-            zombie1.velocity_x = ZOMBIE_VELOCITY;
-            zombie2.velocity_x = ZOMBIE_VELOCITY;
-            showLevelInfo = SDL_GetTicks();
+            resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
+            showLevelInfoTime = SDL_GetTicks();
         }
 
         player1.position.x += (int) player1.velocity_x;
@@ -266,20 +239,19 @@ int main() {
         zombie1.position.x += (int) zombie1.velocity_x;
         zombie2.position.x += (int) zombie2.velocity_x;
 
-        // Drawing Phase
+        // Animation calculation
         player1.calculateCurrentAnimation();
         player2.calculateCurrentAnimation();
         zombie1.calculateCurrentAnimation();
         zombie2.calculateCurrentAnimation();
+        
+        // Drawing Phase
         SDL_RenderClear(ren);
         player1.render(ren);
         player2.render(ren);
         zombie1.render(ren);
         zombie2.render(ren);
-        drawLevel(ren, levels[currentLevel]);
-        if (showLevelInfo + SHOW_CURRENT_LEVEL_TIME_MS > SDL_GetTicks()) {
-            levels[currentLevel].RenderLevelInfo(ren);
-        }
+        drawLevel(ren, levels[currentLevel], showLevelInfoTime);
         SDL_RenderPresent(ren);
         
         if (levelDone) {
@@ -287,33 +259,19 @@ int main() {
                 quit = true;
             } else {
                 currentLevel += 1;
-                // TODO: refactor
-                player1.resetPosition(levels[currentLevel].startingPosPlayer1);
-                player2.resetPosition(levels[currentLevel].startingPosPlayer2);
-                zombie1.resetPosition(levels[currentLevel].startingPosZombie1);
-                zombie2.resetPosition(levels[currentLevel].startingPosZombie2);
-                zombie1.direction = RIGHT;
-                zombie2.direction = RIGHT;
-                zombie1.velocity_x = ZOMBIE_VELOCITY;
-                zombie2.velocity_x = ZOMBIE_VELOCITY;
+                resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
                 levelDone = false;
-                showLevelInfo = SDL_GetTicks();
+                showLevelInfoTime = SDL_GetTicks();
             }
         }
     }
-    
-    // todo refactor this
-    SDL_RenderClear(ren);
-    SDL_Texture *congratsTexture = loadTexture(ren,
-                                               "res/tiles/Other/congrats.bmp");
-    SDL_Rect textureBox;
-    SDL_QueryTexture(congratsTexture, nullptr, nullptr, &textureBox.w, &textureBox.h);
-    Coordinates gameOverCoordinates(SCREEN_WIDTH / 2 - textureBox.w * 0.4f / 2,
-                                    SCREEN_HEIGHT / 2 - textureBox.h * 0.4f / 2);
-    renderTexture(congratsTexture, ren, gameOverCoordinates, 0.4f);
-    SDL_RenderPresent(ren);
-    SDL_Delay(4000);
-    SDL_DestroyTexture(congratsTexture);
+
+    renderCongrats(ren);
+
+    // Cleanup
+    SDL_DestroyTexture(finishFlagTexture);
+    SDL_DestroyTexture(lavaTexture);
+    SDL_DestroyTexture(wallTexture);
 
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);

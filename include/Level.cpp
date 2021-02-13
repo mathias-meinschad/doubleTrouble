@@ -19,7 +19,7 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
         if (3 != std::sscanf(line.c_str(),"%d,%d,%f", &x, &y, &scale)) {
             std::cout << "Check level file \n";
         }
-        walls.emplace_back(Coordinates(x,y), wallTexture, scale);
+        walls.emplace_back(Position(x, y), wallTexture, scale);
     }
 
     getline(inputFile, line);
@@ -31,7 +31,7 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
         if (3 != std::sscanf(line.c_str(),"%d,%d,%f", &x, &y, &scale)) {
             std::cout << "Check level file \n";
         }
-        staticEnemies.emplace_back(Coordinates(x, y), staticEnemyTexture, scale);
+        staticEnemies.emplace_back(Position(x, y), staticEnemyTexture, scale);
     }
 
     getline(inputFile, line);
@@ -43,7 +43,7 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
         if (3 != std::sscanf(line.c_str(),"%d,%d,%f", &x, &y, &scale)) {
             std::cout << "Check level file \n";
         }
-        finishElements.emplace_back(Coordinates(x, y), finishFlagTexture, scale);
+        finishElements.emplace_back(Position(x, y), finishFlagTexture, scale);
     }
 
     getline(inputFile, line);
@@ -51,12 +51,12 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
     if (2 != std::sscanf(line.c_str(),"%d,%d", &x, &y)) {
         std::cout << "Check level file \n";
     }
-    startingPosPlayer1 = Coordinates(x, y);
+    startingPosPlayer1 = Position(x, y);
     getline(inputFile, line);
     if (2 != std::sscanf(line.c_str(),"%d,%d", &x, &y)) {
         std::cout << "Check level file \n";
     }
-    startingPosPlayer2 = Coordinates(x, y);
+    startingPosPlayer2 = Position(x, y);
     
     getline(inputFile, line);
     getline(inputFile, line);
@@ -64,12 +64,12 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
     if (2 != std::sscanf(line.c_str(),"%d,%d", &x, &y)) {
         std::cout << "Check level file \n";
     }
-    startingPosZombie1 = Coordinates(x, y);
+    startingPosZombie1 = Position(x, y);
     getline(inputFile, line);
     if (2 != std::sscanf(line.c_str(),"%d,%d", &x, &y)) {
         std::cout << "Check level file \n";
     }
-    startingPosZombie2 = Coordinates(x, y);
+    startingPosZombie2 = Position(x, y);
 }
 
 void Level::RenderLevelInfo(SDL_Renderer* ren) {
