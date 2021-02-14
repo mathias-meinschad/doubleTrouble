@@ -45,6 +45,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/usr/include/SDL2"/>
+					<Add directory="/home/mathi/workspace/double_trouble/helpers/include"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/home/mathi/workspace/double_trouble/Makefile&quot;  VERBOSE=1 double_trouble"/>
@@ -61,6 +62,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/usr/include/SDL2"/>
+					<Add directory="/home/mathi/workspace/double_trouble/helpers/include"/>
 				</Compiler>
 				<MakeCommands>
 					<Build command="/usr/bin/make -f &quot;/home/mathi/workspace/double_trouble/Makefile&quot;  VERBOSE=1 double_trouble/fast"/>
@@ -73,52 +75,52 @@
 		<Unit filename="/home/mathi/workspace/double_trouble/apps/double_trouble.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/CollisionDetection.cpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/CollisionDetection.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/CollisionDetection.h">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/Constants.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/Constants.hpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/GeneralHelper.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/KeyboardHandler.hpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/KeyboardHandler.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/Level.cpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/Level.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/Level.hpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/LevelObject.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/LevelObject.cpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/Menu.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/LevelObject.hpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/SdlHelpers.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/Menu.cpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/include/Sprite.hpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/Menu.h">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/src/CollisionDetection.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/RenderHelper.cpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/src/GeneralHelper.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/RenderHelper.h">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/src/Level.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/SdlHelpers.cpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/src/LevelObject.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/SdlHelpers.hpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/src/Menu.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/Sprite.cpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/src/SdlHelpers.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/include/Sprite.hpp">
+		<Unit filename="/home/mathi/workspace/double_trouble/helpers/src/Sprite.cpp">
 			<Option target="double_trouble"/>
 		</Unit>
 		<Unit filename="/home/mathi/workspace/double_trouble/CMakeLists.txt">
@@ -126,9 +128,6 @@
 		</Unit>
 		<Unit filename="/home/mathi/workspace/double_trouble/../../../../usr/lib/x86_64-linux-gnu/cmake/SDL2/sdl2-config.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\SDL2\"/>
-		</Unit>
-		<Unit filename="/home/mathi/workspace/double_trouble/cmake/FindSDL2_image.cmake">
-			<Option virtualFolder="CMake Files\cmake\"/>
 		</Unit>
 		<Unit filename="/home/mathi/workspace/double_trouble/cmake/FindSDL2_ttf.cmake">
 			<Option virtualFolder="CMake Files\cmake\"/>

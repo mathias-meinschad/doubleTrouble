@@ -2,16 +2,14 @@
 #include <vector>
 #include <filesystem>
 #include "SDL2/SDL.h"
-#include "../include/KeyboardHandler.hpp"
-#include "../include/SdlHelpers.hpp"
-#include "../include/Sprite.hpp"
-#include "../include/CollisionDetection.h"
-#include "../include/Menu.h"
-#include "../include/GeneralHelper.hpp"
+#include "KeyboardHandler.hpp"
+#include "SdlHelpers.hpp"
+#include "Sprite.hpp"
+#include "CollisionDetection.hpp"
+#include "Menu.hpp"
+#include "GeneralHelper.hpp"
 
-int main() {
-    std::cout << std::filesystem::current_path() << std::endl;
-    
+int main() {    
     SDL_Window *win;
     SDL_Renderer *ren;
     if (!init(win, ren)) {
@@ -88,7 +86,7 @@ int main() {
 
     // Background colour
     bool levelDone = false;
-    Uint64 showLevelInfoTime = SDL_GetTicks();
+    levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
     bool openMenu = true;
     while (!quit) {
         if (openMenu) {
@@ -96,7 +94,7 @@ int main() {
             if (showMainMenu(ren, currentLevel, levelsUnlocked) == EXIT) {
                 return EXIT_SUCCESS;
             }
-            showLevelInfoTime = SDL_GetTicks();
+            levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
             resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
             continue;
         }
@@ -199,14 +197,14 @@ int main() {
         if (objectCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
             SDL_Delay(500);
             resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
-            showLevelInfoTime = SDL_GetTicks();
+            levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
         }
 
         // todo refactor this
         if (objectCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
             SDL_Delay(500);
             resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
-            showLevelInfoTime = SDL_GetTicks();
+            levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
         }
         
         // todo refactor this
@@ -227,7 +225,7 @@ int main() {
             || spriteCollisionDetection(player2, zombie1)) {
             SDL_Delay(500);
             resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
-            showLevelInfoTime = SDL_GetTicks();
+            levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
         }
 
         player1.position.x += (int) player1.velocity_x;
@@ -251,9 +249,10 @@ int main() {
         player2.render(ren);
         zombie1.render(ren);
         zombie2.render(ren);
-        drawLevel(ren, levels[currentLevel], showLevelInfoTime);
+        drawLevel(ren, levels[currentLevel]);
         SDL_RenderPresent(ren);
         
+        // Check if level done
         if (levelDone) {
             if (currentLevel == maxLevel) {
                 quit = true;
@@ -261,7 +260,7 @@ int main() {
                 currentLevel += 1;
                 resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
                 levelDone = false;
-                showLevelInfoTime = SDL_GetTicks();
+                levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
             }
         }
     }
