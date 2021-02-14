@@ -2,8 +2,10 @@
 
 template<typename T, typename F>
 bool collisionBelow(const T &obj1, const F &obj2) {
-    if (obj1.position.y + obj1.drawBox.height > obj2.position.y && obj1.position.y < obj2.position.y + obj2.drawBox.height) {
-        if (obj1.position.x + obj1.drawBox.width > obj2.position.x && obj1.position.x < obj2.position.x + obj2.drawBox.width) {
+    if (obj1.position.y + obj1.drawBox.height > obj2.position.y &&
+        obj1.position.y < obj2.position.y + obj2.drawBox.height) {
+        if (obj1.position.x + obj1.drawBox.width > obj2.position.x &&
+            obj1.position.x < obj2.position.x + obj2.drawBox.width) {
             return true;
         }
     }
@@ -12,8 +14,10 @@ bool collisionBelow(const T &obj1, const F &obj2) {
 
 template<typename T, typename F>
 bool collisionTop(const T &obj1, const F &obj2) {
-    if (obj1.position.y < obj2.position.y + obj2.drawBox.height && obj1.position.y + obj1.drawBox.height > obj2.position.y) {
-        if (obj1.position.x + obj1.drawBox.width > obj2.position.x && obj1.position.x < obj2.position.x + obj2.drawBox.width) {
+    if (obj1.position.y < obj2.position.y + obj2.drawBox.height &&
+        obj1.position.y + obj1.drawBox.height > obj2.position.y) {
+        if (obj1.position.x + obj1.drawBox.width > obj2.position.x &&
+            obj1.position.x < obj2.position.x + obj2.drawBox.width) {
             return true;
         }
     }
@@ -22,8 +26,10 @@ bool collisionTop(const T &obj1, const F &obj2) {
 
 template<typename T, typename F>
 bool collisionRight(const T &obj1, const F &obj2) {
-    if (obj1.position.y + obj1.drawBox.height > obj2.position.y && obj1.position.y < obj2.position.y + obj2.drawBox.height) {
-        if (obj1.position.x + obj1.drawBox.width > obj2.position.x && obj1.position.x < obj2.position.x + obj2.drawBox.width) {
+    if (obj1.position.y + obj1.drawBox.height > obj2.position.y &&
+        obj1.position.y < obj2.position.y + obj2.drawBox.height) {
+        if (obj1.position.x + obj1.drawBox.width > obj2.position.x &&
+            obj1.position.x < obj2.position.x + obj2.drawBox.width) {
             return true;
         }
     }
@@ -32,8 +38,10 @@ bool collisionRight(const T &obj1, const F &obj2) {
 
 template<typename T, typename F>
 bool collisionLeft(const T &obj1, const F &obj2) {
-    if (obj1.position.y + obj1.drawBox.height > obj2.position.y && obj1.position.y < obj2.position.y + obj2.drawBox.height) {
-        if (obj1.position.x < obj2.position.x + obj2.drawBox.width && obj1.position.x + obj1.drawBox.width > obj2.position.x) {
+    if (obj1.position.y + obj1.drawBox.height > obj2.position.y &&
+        obj1.position.y < obj2.position.y + obj2.drawBox.height) {
+        if (obj1.position.x < obj2.position.x + obj2.drawBox.width &&
+            obj1.position.x + obj1.drawBox.width > obj2.position.x) {
             return true;
         }
     }
@@ -63,7 +71,7 @@ bool wallCollisionBelow(const Sprite &sprite, const LevelObjects &object) {
     return false;
 }
 
-bool wallCollisionRight(const Sprite &sprite,  const LevelObjects &object) {
+bool wallCollisionRight(const Sprite &sprite, const LevelObjects &object) {
     if (sprite.position.y + sprite.drawBox.height > object.position.y &&
         sprite.position.y < object.position.y + object.drawBox.height) {
         if (sprite.position.x + sprite.drawBox.width + 2 > object.position.x &&
@@ -119,7 +127,7 @@ bool wallCollision(Sprite &sprite, const std::list<LevelObjects> &walls) {
     return collision;
 }
 
-bool objectCollision( Sprite &sprite,  std::list<LevelObjects> &objects) {
+bool objectCollision(Sprite &sprite, std::list<LevelObjects> &objects) {
     for (auto &object : objects) {
         if (collisionBelow(sprite, object) || collisionTop(sprite, object) || collisionLeft(sprite, object) ||
             collisionRight(sprite, object)) {
@@ -138,7 +146,7 @@ bool spriteCollision(Sprite &sprite1, Sprite &sprite2) {
     return false;
 }
 
-void wallCollisionDetection(const Level& level, Player& player1, Player& player2, Zombie& zombie1, Zombie& zombie2) {
+void wallCollisionDetection(const Level &level, Player &player1, Player &player2, Zombie &zombie1, Zombie &zombie2) {
     if (!wallCollision(player1, level.walls)) {
         player1.grounded = false;
     }
@@ -158,7 +166,7 @@ void wallCollisionDetection(const Level& level, Player& player1, Player& player2
     }
 }
 
-bool objectCollisionDetection(Level& level, Player& player1, Player& player2, Zombie& zombie1, Zombie& zombie2) {
+bool objectCollisionDetection(Level &level, Player &player1, Player &player2, Zombie &zombie1, Zombie &zombie2) {
     bool levelDone = false;
     if (objectCollision(player1, level.staticEnemies)) {
         SDL_Delay(500);

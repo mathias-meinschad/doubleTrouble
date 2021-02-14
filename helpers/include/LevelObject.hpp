@@ -17,10 +17,11 @@ struct Position {
 
 struct LevelObjects {
     LevelObjects(Position position, SDL_Texture *texture, float textureScale);
-    
+
     DrawBox drawBox;
     SDL_Texture *texture;
     float textureScale;
     Position position;
 };
+
 #endif //DOUBLE_TROUBLE_LEVELOBJECT_HPP

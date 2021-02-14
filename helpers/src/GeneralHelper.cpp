@@ -15,7 +15,7 @@ void renderCongrats(SDL_Renderer *ren) {
     SDL_DestroyTexture(congratsTexture);
 }
 
-void resetPositions(const Level& level, Sprite& player1, Sprite& player2, Sprite& zombie1, Sprite& zombie2) {
+void resetPositions(const Level &level, Sprite &player1, Sprite &player2, Sprite &zombie1, Sprite &zombie2) {
     player1.resetPosition(level.startingPosPlayer1);
     player2.resetPosition(level.startingPosPlayer2);
     zombie1.resetPosition(level.startingPosZombie1);
@@ -35,7 +35,7 @@ int getUnlockedLevels() {
     }
 }
 
-void inputPhase(Player& player1, Player& player2) {
+void inputPhase(Player &player1, Player &player2) {
     if (KeyboardHandler::isPressed(SDLK_a) || KeyboardHandler::isPressed(SDLK_LEFT)) {
         player1.direction = LEFT;
         player1.velocity_x -= 2;
@@ -85,7 +85,7 @@ void inputPhase(Player& player1, Player& player2) {
     }
 }
 
-void positioningPhase(Player& player1, Player& player2, Zombie& zombie1, Zombie& zombie2) {
+void positioningPhase(Player &player1, Player &player2, Zombie &zombie1, Zombie &zombie2) {
     player1.position.x += (int) player1.velocity_x;
     player1.velocity_x = 0;
 

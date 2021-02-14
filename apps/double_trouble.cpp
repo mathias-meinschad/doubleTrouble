@@ -8,7 +8,7 @@
 #include "Menu.hpp"
 #include "GeneralHelper.hpp"
 
-int main() {    
+int main() {
     SDL_Window *win;
     SDL_Renderer *ren;
     if (!init(win, ren)) {
@@ -24,19 +24,19 @@ int main() {
     Player player2(RIGHT, 0.25f, ren, "res/tiles/Female/");
     Zombie zombie1(RIGHT, 0.25f, ren, "res/tiles/Zombie/");
     Zombie zombie2(RIGHT, 0.25f, ren, "res/tiles/Zombie/");
-    
+
     // creating textures for levels
-    SDL_Texture *wallTexture = loadTexture(ren,"res/tiles/Walls/simple_wall.bmp");
-    SDL_Texture *staticEnemyTexture = loadTexture(ren,"res/tiles/Walls/simple_lava.bmp");
-    SDL_Texture *finishFlagTexture = loadTexture(ren,"res/tiles/Other/finish_flag.bmp");
-    
+    SDL_Texture *wallTexture = loadTexture(ren, "res/tiles/Walls/simple_wall.bmp");
+    SDL_Texture *staticEnemyTexture = loadTexture(ren, "res/tiles/Walls/simple_lava.bmp");
+    SDL_Texture *finishFlagTexture = loadTexture(ren, "res/tiles/Other/finish_flag.bmp");
+
     // creating levels
     Level levels[NR_OF_LEVELS];
     for (int i = 0; i < NR_OF_LEVELS; i++) {
-        auto levelPath = "res/levels/Level" + std::to_string(i+1) + ".txt";
+        auto levelPath = "res/levels/Level" + std::to_string(i + 1) + ".txt";
         levels[i] = Level(levelPath, wallTexture, staticEnemyTexture, finishFlagTexture);;
     }
-    
+
     // important variables for level advancement + level info + menu
     int levelsUnlocked = getUnlockedLevels();
     int currentLevel = 0;
@@ -58,7 +58,7 @@ int main() {
         }
 
         SDL_SetRenderDrawColor(ren, 70, 70, 70, 0);
-        
+
         while (SDL_PollEvent(&e)) {
             KeyboardHandler::handleKeyboardEvent(e);
             if (e.type == SDL_KEYDOWN) {
@@ -83,7 +83,7 @@ int main() {
                 }
             }
         }
-        
+
         // Animation calculation
         player1.calculateCurrentAnimation();
         player2.calculateCurrentAnimation();
@@ -91,13 +91,13 @@ int main() {
         zombie2.calculateCurrentAnimation();
 
         inputPhase(player1, player2);
-        
+
         // collision Phase
-        wallCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
-        levelDone = objectCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
-        
+        wallCollisionDetection(levels[currentLevel], player1, player2, zombie1, zombie2);
+        levelDone = objectCollisionDetection(levels[currentLevel], player1, player2, zombie1, zombie2);
+
         positioningPhase(player1, player2, zombie1, zombie2);
-        
+
         // Drawing Phase
         SDL_RenderClear(ren);
         player1.render(ren);
@@ -106,7 +106,7 @@ int main() {
         zombie2.render(ren);
         drawLevel(ren, levels[currentLevel]);
         SDL_RenderPresent(ren);
-        
+
         // Check if level done
         if (levelDone) {
             if (currentLevel == maxLevel) {

@@ -13,7 +13,7 @@ enum Direction {
 
 class Sprite {
 public:
-    Sprite(Direction direction, float scale, SDL_Renderer *ren, const std::string& pathToResource);
+    Sprite(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource);
 
     ~Sprite();
 
@@ -40,15 +40,16 @@ public:
     Uint64 lastJump = 0;
 };
 
-class Player: public Sprite {
+class Player : public Sprite {
 public:
-    Player(Direction direction, float scale, SDL_Renderer* ren, const std::string& pathToResource);
+    Player(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource);
+
     ~Player();
 };
 
 class Zombie : public Sprite {
 public:
-    Zombie(Direction direction, float scale, SDL_Renderer* ren, const std::string& pathToResource);
+    Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource);
 };
 
 

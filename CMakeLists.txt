@@ -7,11 +7,11 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 find_package(SDL2 REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 include_directories(
-        ${SDL2_INCLUDE_DIRS} 
+        ${SDL2_INCLUDE_DIRS}
         ${SDL2_TTF_INCLUDE_DIR}
         helpers/include)
 
-add_executable(double_trouble apps/double_trouble.cpp 
+add_executable(double_trouble apps/double_trouble.cpp
         helpers/include/CollisionDetection.hpp
         helpers/src/CollisionDetection.cpp
         helpers/include/Constants.hpp
@@ -29,6 +29,6 @@ add_executable(double_trouble apps/double_trouble.cpp
         helpers/include/Sprite.hpp
         helpers/src/Sprite.cpp)
 
-target_link_libraries(double_trouble 
-        ${SDL2_LIBRARIES} 
-        ${SDL2_TTF_LIBRARIES} )
+target_link_libraries(double_trouble
+        ${SDL2_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES})
