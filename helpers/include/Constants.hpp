@@ -17,6 +17,7 @@ const float ZOMBIE_VELOCITY = 1.0f;
 const int SHOW_CURRENT_LEVEL_TIME_MS = 3000;
 
 const int NR_OF_LEVELS = 10;
+const int NR_OF_ANIMATION_SPRITES = 2;
 
 const std::string PATH_TO_SAVED_GAME = "res/levels/unlockedLevels.txt";
 

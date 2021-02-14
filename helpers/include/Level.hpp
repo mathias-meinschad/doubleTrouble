@@ -13,10 +13,12 @@
 #include "SdlHelpers.hpp"
 
 struct Level {
+    Level() = default;
     Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *staticEnemyTexture, SDL_Texture *finishFlagTexture);
+    ~Level();
     void RenderLevelInfo(SDL_Renderer* ren);
 
-    std::list<Wall> walls;
+    std::list<LevelObjects> walls;
     std::list<LevelObjects> staticEnemies;
     std::list<LevelObjects> finishElements;
     Position startingPosPlayer1 = Position(0, 0);
@@ -25,6 +27,7 @@ struct Level {
     Position startingPosZombie2 = Position(0, 0);
     std::string name;
     Uint64 showLevelInfoTime = SDL_GetTicks();
+    SDL_Texture *levelInfoTexture = nullptr;
 };
 
 void drawLevel(SDL_Renderer *ren, Level &level);

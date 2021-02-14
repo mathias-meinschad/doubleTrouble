@@ -13,14 +13,17 @@ enum Direction {
 
 class Sprite {
 public:
-    Sprite(Direction direction, int numOfSpriteAnimations, SDL_Texture **tex, float scale = 1);
+    Sprite(Direction direction, float scale, SDL_Renderer *ren, const std::string& path);
+
     ~Sprite();
+
     void calculateCurrentAnimation();
+
     void render(SDL_Renderer *ren);
+
     void resetPosition(Position pos);
 
     Direction direction;
-    int numOfSpriteAnimations;
     Position position = Position(0, 0);
     SDL_Texture *currentTexture;
     SDL_Texture **animationTextures;
@@ -35,6 +38,17 @@ public:
     bool grounded = false;
     Uint64 animationLastUpdated = 0;
     Uint64 lastJump = 0;
+};
+
+class Player: public Sprite {
+public:
+    Player(Direction direction, float scale, SDL_Renderer* ren, const std::string& path);
+    ~Player();
+};
+
+class Zombie : public Sprite {
+public:
+    Zombie(Direction direction, float scale, SDL_Renderer* ren, const std::string& path);
 };
 
 

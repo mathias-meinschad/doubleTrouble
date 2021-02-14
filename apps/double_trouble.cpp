@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <filesystem>
 #include "SDL2/SDL.h"
 #include "KeyboardHandler.hpp"
 #include "SdlHelpers.hpp"
@@ -20,74 +19,33 @@ int main() {
         std::cout << TTF_GetError() << "\n";
     }
 
-    int levelsUnlocked;
-    if (std::filesystem::exists(PATH_TO_SAVED_GAME)) {
-        std::ifstream savedGameFile(PATH_TO_SAVED_GAME);
-        std::string line;
-        getline(savedGameFile, line);
-        levelsUnlocked = (int) std::strtol(line.c_str(), nullptr, 10);
-    } else {
-        std::ofstream savedGameFile(PATH_TO_SAVED_GAME);
-        savedGameFile << "1\n";
-        levelsUnlocked = 1;
-    }
-
-    SDL_Texture *player1AnimationSprites[2];
-    player1AnimationSprites[0] = loadTexture(ren,"res/tiles/Player/player_walk1.bmp");
-    player1AnimationSprites[1] = loadTexture(ren,"res/tiles/Player/player_walk2.bmp");
-    SDL_Texture *player2AnimationSprites[2];
-    player2AnimationSprites[0] = loadTexture(ren,"res/tiles/Female/female_walk1.bmp");
-    player2AnimationSprites[1] = loadTexture(ren,"res/tiles/Female/female_walk2.bmp");
-    SDL_Texture *zombieAnimationSprites[2];
-    zombieAnimationSprites[0] = loadTexture(ren,"res/tiles/Zombie/zombie_walk1.bmp");
-    zombieAnimationSprites[1] = loadTexture(ren,"res/tiles/Zombie/zombie_walk2.bmp");
-    SDL_Event e;
-    Sprite player1(RIGHT, 2, player1AnimationSprites, 0.25f);
-    Sprite player2(RIGHT, 2, player2AnimationSprites, 0.25f);
-    Sprite zombie1(RIGHT, 2, zombieAnimationSprites, 0.25f);
-    Sprite zombie2(RIGHT, 2, zombieAnimationSprites, 0.25f);
-    zombie1.velocity_x = ZOMBIE_VELOCITY;
-    zombie2.velocity_x = ZOMBIE_VELOCITY;
-    zombie1.grounded = true;
-    zombie2.grounded = true;
-    player1.slideTexture = loadTexture(ren,"res/tiles/Player/player_slide.bmp");
-    player1.idleTexture = loadTexture(ren,"res/tiles/Player/player_idle.bmp");
-    player2.slideTexture = loadTexture(ren,"res/tiles/Female/female_slide.bmp");
-    player2.idleTexture = loadTexture(ren,"res/tiles/Female/female_idle.bmp");
-
+    // creating players and zombies
+    Player player1(RIGHT, 0.25f, ren, "res/tiles/Player/");
+    Player player2(RIGHT, 0.25f, ren, "res/tiles/Female/");
+    Zombie zombie1(RIGHT, 0.25f, ren, "res/tiles/Zombie/");
+    Zombie zombie2(RIGHT, 0.25f, ren, "res/tiles/Zombie/");
+    
+    // creating textures for levels
     SDL_Texture *wallTexture = loadTexture(ren,"res/tiles/Walls/simple_wall.bmp");
-    SDL_Texture *lavaTexture = loadTexture(ren,"res/tiles/Walls/simple_lava.bmp");
+    SDL_Texture *staticEnemyTexture = loadTexture(ren,"res/tiles/Walls/simple_lava.bmp");
     SDL_Texture *finishFlagTexture = loadTexture(ren,"res/tiles/Other/finish_flag.bmp");
-
-    std::string level1File("res/levels/Level1.txt");
-    Level level1(level1File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level2File("res/levels/Level2.txt");
-    Level level2(level2File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level3File("res/levels/Level3.txt");
-    Level level3(level3File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level4File("res/levels/Level4.txt");
-    Level level4(level4File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level5File("res/levels/Level5.txt");
-    Level level5(level5File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level6File("res/levels/Level6.txt");
-    Level level6(level6File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level7File("res/levels/Level7.txt");
-    Level level7(level7File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level8File("res/levels/Level8.txt");
-    Level level8(level8File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level9File("res/levels/Level9.txt");
-    Level level9(level9File, wallTexture, lavaTexture, finishFlagTexture);
-    std::string level10File("res/levels/Level10.txt");
-    Level level10(level10File, wallTexture, lavaTexture, finishFlagTexture);
-    Level levels[NR_OF_LEVELS] = {level1,level2,level3,level4,level5,level6,level7,level8,level9,level10};
+    
+    // creating levels
+    Level levels[NR_OF_LEVELS];
+    for (int i = 0; i < NR_OF_LEVELS; i++) {
+        auto levelPath = "res/levels/Level" + std::to_string(i+1) + ".txt";
+        levels[i] = Level(levelPath, wallTexture, staticEnemyTexture, finishFlagTexture);;
+    }
+    
+    // important variables for level advancement + level info + menu
+    int levelsUnlocked = getUnlockedLevels();
     int currentLevel = 0;
     int maxLevel = 9;
     bool quit = false;
-
-    // Background colour
     bool levelDone = false;
     levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
     bool openMenu = true;
+    SDL_Event e;
     while (!quit) {
         if (openMenu) {
             openMenu = false;
@@ -126,117 +84,13 @@ int main() {
             }
         }
 
-        // input handling/positioning phase
-        if (KeyboardHandler::isPressed(SDLK_a) || KeyboardHandler::isPressed(SDLK_LEFT)) {
-            player1.direction = LEFT;
-            player1.velocity_x -= 2;
-            player2.direction = LEFT;
-            player2.velocity_x -= 2;
-        }
-        if (KeyboardHandler::isPressed(SDLK_d) || KeyboardHandler::isPressed(SDLK_RIGHT)) {
-            player1.direction = RIGHT;
-            player1.velocity_x += 2;
-            player2.direction = RIGHT;
-            player2.velocity_x += 2;
-        }
-        if (KeyboardHandler::isPressed(SDLK_s) || KeyboardHandler::isPressed(SDLK_DOWN)) {
-            player1.sliding = true;
-            player2.sliding = true;
-        }
-        if (KeyboardHandler::isReleased(SDLK_s) && KeyboardHandler::isReleased(SDLK_DOWN)) {
-            player1.sliding = false;
-            player2.sliding = false;
-        }
-
-        if (KeyboardHandler::isReleased(SDLK_a) && KeyboardHandler::isReleased(SDLK_LEFT)
-            && KeyboardHandler::isReleased(SDLK_d) && KeyboardHandler::isReleased(SDLK_RIGHT)
-            && KeyboardHandler::isReleased(SDLK_s) && KeyboardHandler::isReleased(SDLK_DOWN)) {
-            player1.direction = NONE;
-            player2.direction = NONE;
-        }
-
-        if (!player1.grounded) {
-            player1.position.y -= (int) player1.velocity_y;
-            player1.velocity_y += GRAVITY;
-            if (player1.position.y > SCREEN_HEIGHT - 20) {
-                player1.position.y = SCREEN_HEIGHT - 20;
-                player1.grounded = true;
-                player1.velocity_y = 0;
-            }
-        }
-
-        if (!player2.grounded) {
-            player2.position.y -= (int) player2.velocity_y;
-            player2.velocity_y += GRAVITY;
-            if (player2.position.y > SCREEN_HEIGHT - 20) {
-                player2.position.y = SCREEN_HEIGHT - 20;
-                player2.grounded = true;
-                player2.velocity_y = 0;
-            }
-        }
-
-        if (!wallCollisionDetection(player1, levels[currentLevel].walls)) {
-            player1.grounded = false;
-        }
-
-        if (!wallCollisionDetection(player2, levels[currentLevel].walls)) {
-            player2.grounded = false;
-        }
-
-        if (wallCollisionDetection(zombie1, levels[currentLevel].walls)) {
-            zombie1.direction = zombie1.direction == LEFT ? RIGHT : LEFT;
-            zombie1.velocity_x = zombie1.direction == LEFT ? (-ZOMBIE_VELOCITY) : ZOMBIE_VELOCITY;
-        }
-
-        if (wallCollisionDetection(zombie2, levels[currentLevel].walls)) {
-            zombie2.direction = zombie2.direction == LEFT ? RIGHT : LEFT;
-            zombie2.velocity_x = zombie2.direction == LEFT ? (-ZOMBIE_VELOCITY) : ZOMBIE_VELOCITY;
-        }
-
-        // todo refactor this
-        if (objectCollisionDetection(player1, levels[currentLevel].staticEnemies)) {
-            SDL_Delay(500);
-            resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
-            levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
-        }
-
-        // todo refactor this
-        if (objectCollisionDetection(player2, levels[currentLevel].staticEnemies)) {
-            SDL_Delay(500);
-            resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
-            levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
-        }
+        inputPhase(player1, player2);
         
-        // todo refactor this
-        if (objectCollisionDetection(player1, levels[currentLevel].finishElements)
-            && objectCollisionDetection(player2, levels[currentLevel].finishElements)) {
-            if (currentLevel + 1 == levelsUnlocked) {
-                std::ofstream savedGameFile(PATH_TO_SAVED_GAME);
-                levelsUnlocked++;
-                savedGameFile << levelsUnlocked << "\n";
-            }
-            levelDone = true;
-        }
-
-        // todo refactor this
-        if (spriteCollisionDetection(player1, zombie1)
-            || spriteCollisionDetection(player1, zombie2)
-            || spriteCollisionDetection(player2, zombie2)
-            || spriteCollisionDetection(player2, zombie1)) {
-            SDL_Delay(500);
-            resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
-            levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
-        }
-
-        player1.position.x += (int) player1.velocity_x;
-        player1.velocity_x = 0;
-
-        player2.position.x += (int) player2.velocity_x;
-        player2.velocity_x = 0;
+        wallCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
+        levelDone = objectCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
         
-        zombie1.position.x += (int) zombie1.velocity_x;
-        zombie2.position.x += (int) zombie2.velocity_x;
-
+        positioningPhase(player1, player2, zombie1, zombie2);
+        
         // Animation calculation
         player1.calculateCurrentAnimation();
         player2.calculateCurrentAnimation();
@@ -257,6 +111,11 @@ int main() {
             if (currentLevel == maxLevel) {
                 quit = true;
             } else {
+                if (currentLevel + 1 == levelsUnlocked) {
+                    std::ofstream savedGameFile(PATH_TO_SAVED_GAME);
+                    levelsUnlocked++;
+                    savedGameFile << levelsUnlocked << "\n";
+                }
                 currentLevel += 1;
                 resetPositions(levels[currentLevel], player1, player2, zombie1, zombie2);
                 levelDone = false;
@@ -268,12 +127,12 @@ int main() {
     renderCongrats(ren);
 
     // Cleanup
-    SDL_DestroyTexture(finishFlagTexture);
-    SDL_DestroyTexture(lavaTexture);
     SDL_DestroyTexture(wallTexture);
-
+    SDL_DestroyTexture(staticEnemyTexture);
+    SDL_DestroyTexture(finishFlagTexture);
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
+    TTF_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;
 }

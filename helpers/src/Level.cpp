@@ -3,8 +3,7 @@
 Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *staticEnemyTexture, SDL_Texture *finishFlagTexture) {
     std::ifstream inputFile(filePath);
     if (!inputFile) {
-        // TODO remove this
-        std::cout << "Failed to load Level1" << "\n";
+        return;
     }
     std::string line;
     getline(inputFile, line);
@@ -79,12 +78,17 @@ void Level::RenderLevelInfo(SDL_Renderer* ren) {
     }
     SDL_Color color = {0,0,0};
     SDL_Surface *surface = TTF_RenderText_Solid(timesNewRoman, name.c_str(), color);
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(ren, surface);
+    levelInfoTexture = SDL_CreateTextureFromSurface(ren, surface);
+    SDL_FreeSurface(surface);
     SDL_Rect box;
-    SDL_QueryTexture(texture, NULL, NULL, &box.w, &box.h);
+    SDL_QueryTexture(levelInfoTexture, NULL, NULL, &box.w, &box.h);
     box.x =  SCREEN_WIDTH / 2 - box.w / 2;
     box.y =  40;
-    SDL_RenderCopy(ren, texture, NULL, &box);
+    SDL_RenderCopy(ren, levelInfoTexture, NULL, &box);
+}
+
+Level::~Level() {
+    SDL_DestroyTexture(levelInfoTexture);
 }
 
 void drawLevel(SDL_Renderer *ren, Level &level) {
