@@ -42,7 +42,7 @@ int main() {
     int currentLevel = 0;
     int maxLevel = 9;
     bool quit = false;
-    bool levelDone = false;
+    bool levelDone;
     levels[currentLevel].showLevelInfoTime = SDL_GetTicks();
     bool openMenu = true;
     SDL_Event e;
@@ -83,19 +83,20 @@ int main() {
                 }
             }
         }
-
-        inputPhase(player1, player2);
-        
-        wallCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
-        levelDone = objectCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
-        
-        positioningPhase(player1, player2, zombie1, zombie2);
         
         // Animation calculation
         player1.calculateCurrentAnimation();
         player2.calculateCurrentAnimation();
         zombie1.calculateCurrentAnimation();
         zombie2.calculateCurrentAnimation();
+
+        inputPhase(player1, player2);
+        
+        // collision Phase
+        wallCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
+        levelDone = objectCollisionDetection(levels[currentLevel], player1,player2,zombie1,zombie2);
+        
+        positioningPhase(player1, player2, zombie1, zombie2);
         
         // Drawing Phase
         SDL_RenderClear(ren);

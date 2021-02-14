@@ -13,7 +13,7 @@ enum Direction {
 
 class Sprite {
 public:
-    Sprite(Direction direction, float scale, SDL_Renderer *ren, const std::string& path);
+    Sprite(Direction direction, float scale, SDL_Renderer *ren, const std::string& pathToResource);
 
     ~Sprite();
 
@@ -42,13 +42,13 @@ public:
 
 class Player: public Sprite {
 public:
-    Player(Direction direction, float scale, SDL_Renderer* ren, const std::string& path);
+    Player(Direction direction, float scale, SDL_Renderer* ren, const std::string& pathToResource);
     ~Player();
 };
 
 class Zombie : public Sprite {
 public:
-    Zombie(Direction direction, float scale, SDL_Renderer* ren, const std::string& path);
+    Zombie(Direction direction, float scale, SDL_Renderer* ren, const std::string& pathToResource);
 };
 
 

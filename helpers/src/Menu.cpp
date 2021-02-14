@@ -3,10 +3,8 @@
 MenuEntries showSubMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlocked) {
     levelsUnlocked = std::max(levelsUnlocked, 1);
     levelsUnlocked = std::min(levelsUnlocked, NR_OF_LEVELS);
-    // Background colour
     SDL_SetRenderDrawColor(ren, 0, 0, 0, 0);
-    TTF_Font *timesNewRoman = TTF_OpenFont(
-            "res/fonts/times_new_roman.ttf", 24);
+    TTF_Font *timesNewRoman = TTF_OpenFont("res/fonts/times_new_roman.ttf", 24);
     if (!timesNewRoman) {
         std::cout << TTF_GetError() << "\n";
     }
@@ -15,8 +13,7 @@ MenuEntries showSubMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlocke
     for (int i = 0; i < NR_OF_LEVELS; i++) {
         labels[i] = levelString + std::to_string(i + 1);
     }
-    SDL_Texture *lockTexture = loadTexture(ren,
-                                           "res/tiles/Other/lock.bmp");
+    SDL_Texture *lockTexture = loadTexture(ren, "res/tiles/Other/lock.bmp");
     SDL_Texture *menus[NR_OF_LEVELS];
     int selectedEntry = 0;
     SDL_Color color[3] = {{255, 255, 255},
@@ -92,7 +89,8 @@ MenuEntries showSubMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlocke
                             }
                         }
                     }
-                    if (event.key.keysym.sym == SDLK_KP_ENTER || event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE) {
+                    if (event.key.keysym.sym == SDLK_KP_ENTER || event.key.keysym.sym == SDLK_RETURN ||
+                        event.key.keysym.sym == SDLK_SPACE) {
                         for (auto &menu : menus) {
                             SDL_DestroyTexture(menu);
                         }
@@ -192,7 +190,8 @@ MenuEntries showMainMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlock
                             }
                         }
                     }
-                    if (event.key.keysym.sym == SDLK_KP_ENTER || event.key.keysym.sym == SDLK_RETURN || event.key.keysym.sym == SDLK_SPACE) {
+                    if (event.key.keysym.sym == SDLK_KP_ENTER || event.key.keysym.sym == SDLK_RETURN ||
+                        event.key.keysym.sym == SDLK_SPACE) {
                         switch (selectedEntry) {
                             case 0:
                                 currentLevel = 0;

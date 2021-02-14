@@ -1,10 +1,10 @@
 #include "Sprite.hpp"
 
-Sprite::Sprite(Direction direction, float scale, SDL_Renderer *ren, const std::string &path)
+Sprite::Sprite(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource)
         : direction(direction) {
     animationTextures = (SDL_Texture **) malloc(sizeof(SDL_Texture *) * NR_OF_ANIMATION_SPRITES);
-    animationTextures[0] = loadTexture(ren, (path + "walk1.bmp").c_str());
-    animationTextures[1] = loadTexture(ren, (path + "walk2.bmp").c_str());
+    animationTextures[0] = loadTexture(ren, (pathToResource + "walk1.bmp").c_str());
+    animationTextures[1] = loadTexture(ren, (pathToResource + "walk2.bmp").c_str());
     textureScale = scale;
     SDL_Rect playerBox;
     SDL_QueryTexture(animationTextures[0], NULL, NULL, &playerBox.w, &playerBox.h);
@@ -52,10 +52,10 @@ void Sprite::resetPosition(Position pos) {
     direction = RIGHT;
 }
 
-Zombie::Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::string &path)
+Zombie::Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource)
         : Sprite(direction,
                  scale,
-                 ren, path) {
+                 ren, pathToResource) {
     // Zombies are always grounded, they cannot fall of something and their direction is right from the beginning and their speed is the constant
     grounded = true;
     direction = RIGHT;
@@ -63,9 +63,9 @@ Zombie::Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::s
 }
 
 Player::Player(Direction direction, float scale, SDL_Renderer *ren,
-               const std::string &path) : Sprite(direction, scale, ren, path) {
-    idleTexture = loadTexture(ren, (path + "idle.bmp").c_str());
-    slideTexture = loadTexture(ren, (path + "slide.bmp").c_str());
+               const std::string &pathToResource) : Sprite(direction, scale, ren, pathToResource) {
+    idleTexture = loadTexture(ren, (pathToResource + "idle.bmp").c_str());
+    slideTexture = loadTexture(ren, (pathToResource + "slide.bmp").c_str());
 }
 
 Player::~Player() {
