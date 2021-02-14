@@ -49,7 +49,8 @@ void Sprite::render(SDL_Renderer *ren) {
 void Sprite::resetPosition(Position pos) {
     position.x = pos.x;
     position.y = pos.y;
-    direction = RIGHT;
+    velocity_x = 0;
+    velocity_y = 0;
 }
 
 Zombie::Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource)
@@ -58,6 +59,12 @@ Zombie::Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::s
                  ren, pathToResource) {
     // Zombies are always grounded, they cannot fall of something and their direction is right from the beginning and their speed is the constant
     grounded = true;
+    velocity_x = ZOMBIE_VELOCITY;
+}
+
+void Zombie::resetPosition(Position pos) {
+    position.x = pos.x;
+    position.y = pos.y;
     direction = RIGHT;
     velocity_x = ZOMBIE_VELOCITY;
 }

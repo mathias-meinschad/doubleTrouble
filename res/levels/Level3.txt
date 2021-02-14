@@ -217,8 +217,8 @@ finishElements
 1100,660,0.04
 
 startingPosition
-100,20
-100,400
+100,180
+100,580
 
 startingPositionZombies
 -100,-100

@@ -21,7 +21,7 @@ public:
 
     void render(SDL_Renderer *ren);
 
-    void resetPosition(Position pos);
+    virtual void resetPosition(Position pos);
 
     Direction direction;
     Position position = Position(0, 0);
@@ -50,6 +50,7 @@ public:
 class Zombie : public Sprite {
 public:
     Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource);
+    void resetPosition(Position pos) override;
 };
 
 
