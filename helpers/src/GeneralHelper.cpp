@@ -66,22 +66,13 @@ void inputPhase(Player &player1, Player &player2) {
 
     if (!player1.grounded) {
         player1.position.y -= (int) player1.velocity_y;
-        player1.velocity_y += GRAVITY;
-        if (player1.position.y > SCREEN_HEIGHT - 20) {
-            player1.position.y = SCREEN_HEIGHT - 20;
-            player1.grounded = true;
-            player1.velocity_y = 0;
-        }
+        player1.velocity_y = player1.velocity_y + GRAVITY > MAX_VELOCITY_Y ? player1.velocity_y + GRAVITY : MAX_VELOCITY_Y;
     }
 
     if (!player2.grounded) {
         player2.position.y -= (int) player2.velocity_y;
-        player2.velocity_y += GRAVITY;
-        if (player2.position.y > SCREEN_HEIGHT - 20) {
-            player2.position.y = SCREEN_HEIGHT - 20;
-            player2.grounded = true;
-            player2.velocity_y = 0;
-        }
+        std::cout << player2.velocity_y << "\n";
+        player2.velocity_y = player2.velocity_y + GRAVITY > MAX_VELOCITY_Y ? player2.velocity_y + GRAVITY : MAX_VELOCITY_Y;
     }
 }
 

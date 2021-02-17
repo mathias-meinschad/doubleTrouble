@@ -9,6 +9,8 @@ const int SCREEN_HEIGHT = 720;
 const int ANIMATION_SPEED_IN_MS = 250;
 
 const float GRAVITY = -1.0f;
+// max velocity y is needed to not fall through small walls
+const float MAX_VELOCITY_Y = -25.0f;
 const float JUMP_POWER = 15.0f;
 const int JUMP_TICKS = 500;
 
