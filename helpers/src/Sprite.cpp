@@ -16,12 +16,6 @@ Sprite::~Sprite() {
     for (int i = 0; i < NR_OF_ANIMATION_SPRITES; i++) {
         SDL_DestroyTexture(animationTextures[i]);
     }
-    if (slideTexture != nullptr) {
-        SDL_DestroyTexture(slideTexture);
-    }
-    if (idleTexture != nullptr) {
-        SDL_DestroyTexture(idleTexture);
-    }
     free(animationTextures);
 }
 

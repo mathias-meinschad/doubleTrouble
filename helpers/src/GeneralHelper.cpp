@@ -71,7 +71,6 @@ void inputPhase(Player &player1, Player &player2) {
 
     if (!player2.grounded) {
         player2.position.y -= (int) player2.velocity_y;
-        std::cout << player2.velocity_y << "\n";
         player2.velocity_y = player2.velocity_y + GRAVITY > MAX_VELOCITY_Y ? player2.velocity_y + GRAVITY : MAX_VELOCITY_Y;
     }
 }

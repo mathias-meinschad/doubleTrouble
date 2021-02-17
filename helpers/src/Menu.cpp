@@ -33,7 +33,7 @@ MenuEntries showSubMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlocke
         }
         menus[i] = SDL_CreateTextureFromSurface(ren, menuSurface);
         SDL_Rect textureBox;
-        SDL_QueryTexture(menus[i], NULL, NULL, &textureBox.w, &textureBox.h);
+        SDL_QueryTexture(menus[i], nullptr, nullptr, &textureBox.w, &textureBox.h);
         pos[i].x = SCREEN_WIDTH / 2 - textureBox.w / 2;
         pos[i].y = 100 + i * 50;
         pos[i].h = textureBox.h;
@@ -134,7 +134,7 @@ MenuEntries showMainMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlock
         }
         menus[i] = SDL_CreateTextureFromSurface(ren, menuSurface);
         SDL_Rect textureBox;
-        SDL_QueryTexture(menus[i], NULL, NULL, &textureBox.w, &textureBox.h);
+        SDL_QueryTexture(menus[i], nullptr, nullptr, &textureBox.w, &textureBox.h);
         pos[i].x = SCREEN_WIDTH / 2 - textureBox.w / 2;
         pos[i].y = 100 + i * 50;
         pos[i].h = textureBox.h;
@@ -227,7 +227,7 @@ MenuEntries showMainMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlock
         }
         SDL_RenderClear(ren);
         for (int i = 0; i < NR_MENU_ITEMS; i++) {
-            SDL_RenderCopy(ren, menus[i], NULL, &pos[i]);
+            SDL_RenderCopy(ren, menus[i], nullptr, &pos[i]);
         }
         SDL_RenderPresent(ren);
     }
