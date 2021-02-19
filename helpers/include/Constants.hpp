@@ -14,8 +14,6 @@ const float GRAVITY = -1.0f;
 // max velocity y is needed to not fall through small walls
 const float MAX_VELOCITY_Y = -25.0f;
 const float JUMP_POWER = 15.0f;
-// so we cannot fly around
-const int JUMP_TICKS = 500;
 
 const float ZOMBIE_VELOCITY = 1.0f;
 

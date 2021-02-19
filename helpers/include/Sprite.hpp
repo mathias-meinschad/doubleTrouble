@@ -37,7 +37,6 @@ public:
     float velocity_x = 0;
     bool grounded = false;
     Uint64 animationLastUpdated = 0;
-    Uint64 lastJump = 0;
 };
 
 class Player : public Sprite {

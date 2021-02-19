@@ -69,15 +69,13 @@ int main() {
                         case SDLK_w:
                         case SDLK_UP:
                         case SDLK_SPACE:
-                            if (player1.lastJump + JUMP_TICKS < SDL_GetTicks()) {
+                            if (player1.grounded) {
                                 player1.grounded = false;
                                 player1.velocity_y += JUMP_POWER;
-                                player1.lastJump = SDL_GetTicks();
                             }
-                            if (player2.lastJump + JUMP_TICKS < SDL_GetTicks()) {
+                            if (player2.grounded) {
                                 player2.grounded = false;
                                 player2.velocity_y += JUMP_POWER;
-                                player2.lastJump = SDL_GetTicks();
                             }
                             break;
                         case SDLK_ESCAPE:
@@ -128,7 +126,7 @@ int main() {
             }
         }
 
-        if (currentLevel >= maxLevel) {
+        if (currentLevel >= maxLevel && levelDone) {
             renderCongrats(ren);
         }
 
