@@ -66,12 +66,14 @@ void inputPhase(Player &player1, Player &player2) {
 
     if (!player1.grounded) {
         player1.position.y -= (int) player1.velocity_y;
-        player1.velocity_y = player1.velocity_y + GRAVITY > MAX_VELOCITY_Y ? player1.velocity_y + GRAVITY : MAX_VELOCITY_Y;
+        player1.velocity_y =
+                player1.velocity_y + GRAVITY > MAX_VELOCITY_Y ? player1.velocity_y + GRAVITY : MAX_VELOCITY_Y;
     }
 
     if (!player2.grounded) {
         player2.position.y -= (int) player2.velocity_y;
-        player2.velocity_y = player2.velocity_y + GRAVITY > MAX_VELOCITY_Y ? player2.velocity_y + GRAVITY : MAX_VELOCITY_Y;
+        player2.velocity_y =
+                player2.velocity_y + GRAVITY > MAX_VELOCITY_Y ? player2.velocity_y + GRAVITY : MAX_VELOCITY_Y;
     }
 }
 

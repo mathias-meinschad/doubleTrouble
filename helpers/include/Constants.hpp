@@ -8,11 +8,14 @@ const int SCREEN_HEIGHT = 720;
 
 const int ANIMATION_SPEED_IN_MS = 250;
 
+const int NR_MENU_ITEMS = 3;
+
 const float GRAVITY = -1.0f;
 // max velocity y is needed to not fall through small walls
 const float MAX_VELOCITY_Y = -25.0f;
 const float JUMP_POWER = 15.0f;
-const int JUMP_TICKS = 500;
+// so we cannot fly around
+const int JUMP_TICKS = 700;
 
 const float ZOMBIE_VELOCITY = 1.0f;
 

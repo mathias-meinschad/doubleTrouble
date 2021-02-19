@@ -20,8 +20,6 @@ struct Level {
 
     ~Level();
 
-    void RenderLevelInfo(SDL_Renderer *ren);
-
     std::list<LevelObjects> walls;
     std::list<LevelObjects> staticEnemies;
     std::list<LevelObjects> finishElements;
@@ -33,6 +31,8 @@ struct Level {
     Uint64 showLevelInfoTime = SDL_GetTicks();
     SDL_Texture *levelInfoTexture = nullptr;
 };
+
+void renderLevelInfo(SDL_Renderer *ren, Level &level);
 
 void drawLevel(SDL_Renderer *ren, Level &level);
 

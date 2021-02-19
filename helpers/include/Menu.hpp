@@ -13,8 +13,6 @@ enum MenuEntries {
     EXIT,
 };
 
-const int NR_MENU_ITEMS = 3;
-
 MenuEntries showMainMenu(SDL_Renderer *ren, int &currentLevel, int &levelsUnlocked);
 
 #endif //DOUBLE_TROUBLE_MENU_HPP

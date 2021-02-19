@@ -50,6 +50,7 @@ public:
 class Zombie : public Sprite {
 public:
     Zombie(Direction direction, float scale, SDL_Renderer *ren, const std::string &pathToResource);
+
     void resetPosition(Position pos) override;
 };
 

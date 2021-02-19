@@ -72,29 +72,29 @@ Level::Level(std::string &filePath, SDL_Texture *wallTexture, SDL_Texture *stati
     startingPosZombie2 = Position(x, y);
 }
 
-void Level::RenderLevelInfo(SDL_Renderer *ren) {
+Level::~Level() {
+    SDL_DestroyTexture(levelInfoTexture);
+}
+
+void renderLevelInfo(SDL_Renderer *ren, Level &level) {
     TTF_Font *timesNewRoman = TTF_OpenFont("res/fonts/times_new_roman.ttf", 50);
     if (!timesNewRoman) {
         std::cout << TTF_GetError() << "\n";
     }
     SDL_Color color = {0, 0, 0};
-    SDL_Surface *surface = TTF_RenderText_Solid(timesNewRoman, name.c_str(), color);
-    levelInfoTexture = SDL_CreateTextureFromSurface(ren, surface);
+    SDL_Surface *surface = TTF_RenderText_Solid(timesNewRoman, level.name.c_str(), color);
+    level.levelInfoTexture = SDL_CreateTextureFromSurface(ren, surface);
     SDL_FreeSurface(surface);
     SDL_Rect box;
-    SDL_QueryTexture(levelInfoTexture, NULL, NULL, &box.w, &box.h);
+    SDL_QueryTexture(level.levelInfoTexture, NULL, NULL, &box.w, &box.h);
     box.x = SCREEN_WIDTH / 2 - box.w / 2;
     box.y = 40;
-    SDL_RenderCopy(ren, levelInfoTexture, NULL, &box);
-}
-
-Level::~Level() {
-    SDL_DestroyTexture(levelInfoTexture);
+    SDL_RenderCopy(ren, level.levelInfoTexture, NULL, &box);
 }
 
 void drawLevel(SDL_Renderer *ren, Level &level) {
     if (level.showLevelInfoTime + SHOW_CURRENT_LEVEL_TIME_MS > SDL_GetTicks()) {
-        level.RenderLevelInfo(ren);
+        renderLevelInfo(ren, level);
     }
 
     for (auto &wall : level.walls) {
